@@ -1,9 +1,19 @@
 {
   "name": "@cieloazul310/canvasmap",
-  "version": "0.1.5",
+  "description": "Generate plain map for data visualization.",
+  "version": "0.1.6",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
+  "author": {
+    "name": "@cieloazul310",
+    "url": "https://cieloazul310.github.io"
+  },
+  "keywords": [
+    "Data Visualization",
+    "D3.js",
+    "Canvas"
+  ],
   "scripts": {
     "dev": "ts-node --files src/index.ts",
     "dev:watch": "ts-node-dev --respawn --files src/index.ts",
