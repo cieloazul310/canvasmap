@@ -69,7 +69,7 @@ const map = new CanvasMap(width, height, options);
 
 ##### getContext()
 
-*return*: `Context` ([node-canvas])
+*return*: `CanvasRenderingContext2D` ([node-canvas])
 
 ##### getProjection()
 
