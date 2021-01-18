@@ -2,11 +2,15 @@
 
 Canvas マップ -データビジュアライゼーションのための
 
+[![npm version](https://badge.fury.io/js/%40cieloazul310%2Fcanvasmap.svg)](https://badge.fury.io/js/%40cieloazul310%2Fcanvasmap)
+
 ![Gallery](gallery/basic.png)
 
 ## How to Use
 
 ```typescript
+const { CanvasMap } = require('@cieloazul310/canvasmap');
+
 const width = 1000;
 const height = 1000;
 const map = new CanvasMap(width, height);
@@ -46,7 +50,7 @@ const map = new CanvasMap(width, height, options);
 
 地図の表示領域を地物、または GeoJSON オブジェクトで設定する
 
-##### options (*optional*)
+##### options (*optional*): object
 
 - title?: `string`
 - padding?: `Partial<{ top: number; right: number; bottom: number; left: number }`
@@ -57,11 +61,11 @@ const map = new CanvasMap(width, height, options);
 
 ##### getSize()
 
-*return*: `{ width: number; height: number }`
+*return*: `object { width: number; height: number }`
 
 ##### getPadding()
 
-*return*: `{ top: number; right: number; bottom: number; left: number }`
+*return*: `object { top: number; right: number; bottom: number; left: number }`
 
 ##### getCanvas()
 
@@ -105,7 +109,7 @@ options:
 
 ##### getCanvasMapOptions()
 
-*return*: `CanvasMapOptions`
+*return*: `object CanvasMapOptions`
 
 ## Recipes
 
