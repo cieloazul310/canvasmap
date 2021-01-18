@@ -2,6 +2,8 @@
 
 Canvas マップ -データビジュアライゼーションのための
 
+![Gallery](gallery/basic.png)
+
 ## How to Use
 
 ```typescript
@@ -14,7 +16,7 @@ map.renderBasemap('vector')
   });
 ```
 
-## Install
+## Installing
 
 ```sh
 yarn add @cieloazul310/canvasmap
@@ -22,32 +24,88 @@ yarn add @cieloazul310/canvasmap
 
 ## API Reference
 
-class CanvasMap(width: number, height: number, feature: object, options)
+### class CanvasMap
 
-### constructor
+```typescript
+const map = new CanvasMap(width, height, feature, options);
+// or
+const map = new CanvasMap(width, height, options);
+```
 
-#### width (required): number
+#### constructor
+
+##### width (required): `number`
 
 生成する地図の横幅
 
-#### height (required): number
+##### height (required): `number`
 
 生成する地図の縦幅
 
-#### Feature (*optional*): object
+##### feature (*optional*): `GeoJSON` | `GeoJSON Feature`
 
 地図の表示領域を地物、または GeoJSON オブジェクトで設定する
 
-#### options (*optional*)
+##### options (*optional*)
 
-| key      |    type    | default |
-|:--   |:--|:--|
-| padding | Partial<{top: number; right: number; bottom: number; left: number }> |  |
-| center | Position ([number, number]) |  |
-| a | a | a |
-| a | a | a |
+- title?: `string`
+- padding?: `Partial<{ top: number; right: number; bottom: number; left: number }`
+- center?: `Position ([x, y])`
+- zoom?: `number`
 
-### methods
+#### methods
+
+##### getSize()
+
+*return*: `{ width: number; height: number }`
+
+##### getPadding()
+
+*return*: `{ top: number; right: number; bottom: number; left: number }`
+
+##### getCanvas()
+
+*return*: `Canvas` ([node-canvas])
+
+##### getContext()
+
+*return*: `Context` ([node-canvas])
+
+##### getProjection()
+
+*return*: `GeoProjection` ([d3-geo])
+
+##### getPath()
+
+*return*: `GeoPath` ([d3-geo])
+
+##### await renderBasemap(type: `'raster' | 'vector'`, options?)
+
+*return*: `Promise<this>` (Promise object of CanvasMap class)
+
+options:
+
+- tileUrl: `string`;
+- rasterGrayScale: `boolean`;
+- background: `string`;
+- backgroundFeature: `Feature<Polygon | MultiPolygon>`;
+- attribution: `string`;
+
+##### exportPng(fileName: `string`)
+
+*return*: `this` (CanvasMap class)
+
+##### exportJpg(fileName: `string`)
+
+*return*: `this` (CanvasMap class)
+
+##### addAttribution(attribution: `string`)
+
+*return*: `this` (CanvasMap class)
+
+##### getCanvasMapOptions()
+
+*return*: `CanvasMapOptions`
 
 ## Recipes
 
@@ -74,3 +132,33 @@ map.renderBasemap('vector')
   map.exportPng('map.png');
 })();
 ```
+
+### Draw GeoJSON
+
+```typescript
+const geojson = JSON.parse(fs.readFileSync('gj.geojson', 'utf8'));
+const width = 1000;
+const height = 1000;
+const map = new CanvasMap(width, height, geojson);
+await map.renderBasemap('vector');
+const context = map.getContext();
+const path = map.getPath();
+// draw features
+geojson.features.forEach((feature) => {
+  context.beginPath();
+  path(feature);
+  context.fillStyle = '#aaf';
+  context.fill();
+});
+map.exportPng('map.png');
+```
+
+Browse [example codes](./examples) and [gallery](./gallery)
+
+## References
+
+- [node-canvas]
+- [d3-geo]
+
+[node-canvas]: https://github.com/Automattic/node-canvas
+[d3-geo]: https://github.com/d3/d3-geo
