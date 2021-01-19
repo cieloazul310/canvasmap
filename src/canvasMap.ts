@@ -37,6 +37,7 @@ export class CanvasMap {
   options: Partial<CanvasMapOptions>;
   attribution: string[] = [];
   fontSize: MapFontSize;
+  state: { textRendered: boolean } = { textRendered: false };
 
   constructor(
     width: number,
@@ -128,10 +129,11 @@ export class CanvasMap {
     if (this.attribution.length) {
       renderAttribution(this.attribution.join(', '))(this);
     }
+    this.state.textRendered = true;
     return this;
   }
   public exportPng(file: string, config?: PngConfig): CanvasMap {
-    this.renderText();
+    if (!this.state.textRendered) this.renderText();
     const canvas = this.getCanvas();
     const buffer = canvas.toBuffer('image/png', config);
     fs.writeFileSync(file, buffer);
