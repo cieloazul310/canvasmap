@@ -92,7 +92,7 @@ options:
 - tileUrl: `string`;
 - rasterGrayScale: `boolean`;
 - background: `string`;
-- backgroundFeature: `Feature<Polygon | MultiPolygon>`;
+- backgroundFeature: `Feature<Polygon | MultiPolygon> | FeatureCollection<Polygon | MultiPolygon>` ;
 - attribution: `string`;
 
 ##### exportPng(fileName: `string`)
