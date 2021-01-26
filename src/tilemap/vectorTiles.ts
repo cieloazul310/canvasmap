@@ -3,14 +3,14 @@ import { tile as d3tile } from 'd3-tile';
 import Pbf from 'pbf';
 import { VectorTile } from '@mapbox/vector-tile';
 import { ExtendedFeature } from 'd3-geo';
-import { Feature, Polygon, MultiPolygon } from '@turf/helpers';
+import { Feature, FeatureCollection, Polygon, MultiPolygon } from '@turf/helpers';
 import { CanvasMap } from '../canvasMap';
 import { waterarea, contour, road, railway, label, symbol } from './vectorLayers';
 import { tileUrl } from '../utils/tileUrl';
 
 interface Options {
   background: string;
-  backgroundFeature: Feature<Polygon | MultiPolygon> | null;
+  backgroundFeature: Feature<Polygon | MultiPolygon> | FeatureCollection<Polygon | MultiPolygon> | null;
 }
 
 export function vectorTiles(options?: Partial<Options>): (map: CanvasMap) => Promise<void> {
