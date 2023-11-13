@@ -13,6 +13,6 @@ map
   .renderBasemap("vector", { backgroundFeature: geojson })
   .then((canvas) => {
     canvas.addAttribution("国土数値情報");
-    canvas.exportPng("./gallery/bgPolygon.png");
+    canvas.exportPng("./dist/bgPolygon.png");
   })
   .catch((err) => console.error(err));

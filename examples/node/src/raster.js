@@ -10,6 +10,6 @@ const map = new CanvasMap(width, height, {
 map
   .renderBasemap("raster")
   .then((canvas) => {
-    canvas.exportPng("./gallery/raster.png");
+    canvas.exportPng("./dist/raster.png");
   })
   .catch((err) => console.error(err));

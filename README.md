@@ -157,7 +157,7 @@ geojson.features.forEach((feature) => {
 map.exportPng('map.png');
 ```
 
-Browse [example codes](./examples) and [gallery](./gallery)
+Browse [example codes](./examples) and [gallery](./dist)
 
 ## References
 

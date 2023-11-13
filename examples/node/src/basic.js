@@ -8,6 +8,6 @@ const map = new CanvasMap(width, height, {
   title: 'Canvas Map for Data Visualization',
 });
 map.renderBasemap('vector').then((canvas) => {
-  canvas.exportPng("./gallery/basic.png");
+  canvas.exportPng("./dist/basic.png");
 })
 .catch((err) => console.error(err));

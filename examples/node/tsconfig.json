@@ -1,4 +1,0 @@
-{
-  "extends": "@cieloazul310/tsconfig/base",
-  "include": ["src", ".eslintrc.cjs"]
-}

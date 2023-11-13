@@ -18,6 +18,6 @@ map
   .renderBasemap("vector", { backgroundFeature: mito })
   .then((canvas) => {
     canvas.addAttribution("国土数値情報");
-    canvas.exportPng("./gallery/background.png");
+    canvas.exportPng("./dist/background.png");
   })
   .catch((err) => console.error(err));

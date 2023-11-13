@@ -1,5 +1,5 @@
-import { Feature } from "@turf/helpers";
-import { MapFontSizes } from "../utils/mapFontSize";
+import type { Feature } from "@turf/helpers";
+import { palette, type MapFontSizes } from "../utils";
 import type { CanvasMap } from "../canvasMap";
 
 interface VectorLayer {
@@ -11,7 +11,7 @@ export const waterarea: VectorLayer = {
   layerName: "waterarea",
   render: (map: CanvasMap) => () => {
     const context = map.getContext();
-    context.fillStyle = "#ccd";
+    context.fillStyle = palette.waterArea;
     context.fill();
   },
 };
@@ -20,19 +20,19 @@ export const railway: VectorLayer = {
   layerName: "railway",
   render: (map: CanvasMap) => () => {
     const context = map.getContext();
-    context.strokeStyle = "#999";
+    context.strokeStyle = palette.railway;
     context.lineWidth = 2;
     context.stroke();
   },
 };
 
 function roadStrokeColor({ properties }: Feature): string {
-  if (!properties || !("rdCtg" in properties)) return "#fff";
+  if (!properties || !("rdCtg" in properties)) return palette.background;
   const { rdCtg } = properties;
 
-  if (rdCtg === 0) return "#dcb";
-  if (rdCtg === 3) return "#cdc";
-  return "#ddd";
+  if (rdCtg === 0) return palette.road.national;
+  if (rdCtg === 3) return palette.road.highway;
+  return palette.road.base;
 }
 
 function roadLineWidth({ properties }: Feature): number {
@@ -66,7 +66,7 @@ export const contour: VectorLayer = {
   render: (map: CanvasMap) => (feature: Feature) => {
     const context = map.getContext();
     context.lineWidth = contourWidth(feature);
-    context.strokeStyle = "#cba";
+    context.strokeStyle = palette.contour;
     context.stroke();
   },
 };
@@ -76,10 +76,11 @@ function getLabelSize(annoCtg: number): MapFontSizes {
 }
 
 function labelColor(annoCtg: number): string {
-  if ([312, 1312, 2312].includes(annoCtg)) return "#977";
-  if ([321, 1321, 2321, 322, 1322, 2322].includes(annoCtg)) return "#aac";
-  if (annoCtg === 422) return "#aaa";
-  return "#ccc";
+  if ([312, 1312, 2312].includes(annoCtg)) return palette.label.terrain;
+  if ([321, 1321, 2321, 322, 1322, 2322].includes(annoCtg))
+    return palette.label.water;
+  if (annoCtg === 422) return palette.label.em;
+  return palette.label.base;
 }
 
 function dspPosToAlign(align: string) {
@@ -135,7 +136,7 @@ export const label: VectorLayer = {
     context.textAlign = align;
     context.textBaseline = baseline;
     context.fillStyle = labelColor(annoCtg);
-    context.strokeStyle = "#fff";
+    context.strokeStyle = palette.background;
     context.strokeText(knj, x, y);
     context.fillText(knj, x, y);
   },
@@ -164,8 +165,8 @@ export const symbol: VectorLayer = {
     const [align, baseline] = textPos(feature);
     context.textAlign = align;
     context.textBaseline = baseline;
-    context.fillStyle = "#aaa";
-    context.strokeStyle = "#fff";
+    context.fillStyle = palette.label.em;
+    context.strokeStyle = palette.background;
     context.strokeText(knj ?? name, x, y);
     context.fillText(knj ?? name, x, y);
   },

@@ -22,6 +22,6 @@ map
       context.globalCompositeOperation = "source-over";
     });
     canvas.addAttribution("国土数値情報");
-    canvas.exportPng("./gallery/geojson.png");
+    canvas.exportPng("./dist/geojson.png");
   })
   .catch((err) => console.error(err));

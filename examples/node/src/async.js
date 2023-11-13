@@ -9,6 +9,6 @@ const { CanvasMap } = require("@cieloazul310/canvasmap");
     title: "Async",
   });
   await map.renderBasemap("vector").then((canvas) => {
-    canvas.exportPng("./gallery/async.png");
+    canvas.exportPng("./dist/async.png");
   });
 })().catch((err) => console.error(err));
