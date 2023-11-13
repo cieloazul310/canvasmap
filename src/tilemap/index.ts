@@ -1,3 +1,3 @@
-export { rasterTiles } from './rasterTiles';
-export { vectorTiles } from './vectorTiles';
-export * from './vectorLayers';
+export { default as rasterTiles } from "./rasterTiles";
+export { default as vectorTiles } from "./vectorTiles";
+export * from "./vectorLayers";

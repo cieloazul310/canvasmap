@@ -1,7 +1,8 @@
-declare module 'd3-tile' {
+declare module "d3-tile" {
+  /* eslint max-classes-per-file: warn */
   export function tile(): Tile;
 
-  interface Tile {
+  export interface Tile {
     (): Tiles;
     size(): [number, number];
     size(size: [number, number]): this;
@@ -22,35 +23,49 @@ declare module 'd3-tile' {
     clampY(): boolean;
     clampY(clampY: boolean): this;
   }
-  type Tiles = Array<[number, number, number]> & {
+  export type Tiles = Array<[number, number, number]> & {
     translate: [number, number];
     scale: number;
   };
 }
 
-declare module '@mapbox/vector-tile' {
-  import { Pbf } from 'pbf';
-  import { Feature } from '@turf/helpers';
+declare module "@mapbox/vector-tile" {
+  /* eslint max-classes-per-file: warn */
+  import { Pbf } from "pbf";
+  import { Feature } from "@turf/helpers";
 
   class VectorTileFeature {
     type: number;
+
     extent: number;
+
     id: number;
+
     properties: unknown;
-    //loadGeometry(): [][]number;
-    //bbox(): [number, number, number, number];
+
+    // loadGeometry(): [][]number;
+
+    // bbox(): [number, number, number, number];
+
     toGeoJSON<G, P = unknown>(x: number, y: number, z: number): Feature<G, P>;
   }
+
   class Layer {
     version: number;
+
     name: string;
+
     extent: number;
+
     length: number;
+
     feature(i: number): VectorTileFeature;
   }
+
   type Layers = {
     [key: string]: Layer;
   };
+
   declare class VectorTile {
     constructor(protobuf: Pbf);
     layers: Layers;

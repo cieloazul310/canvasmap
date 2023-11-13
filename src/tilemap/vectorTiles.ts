@@ -1,28 +1,45 @@
-import nodeFetch from 'node-fetch';
-import { tile as d3tile } from 'd3-tile';
-import Pbf from 'pbf';
-import { VectorTile } from '@mapbox/vector-tile';
-import { ExtendedFeature } from 'd3-geo';
-import { Feature, FeatureCollection, Polygon, MultiPolygon } from '@turf/helpers';
-import { CanvasMap } from '../canvasMap';
-import { waterarea, contour, road, railway, label, symbol } from './vectorLayers';
-import { tileUrl } from '../utils/tileUrl';
+import nodeFetch from "node-fetch";
+import { tile as d3tile } from "d3-tile";
+import Pbf from "pbf";
+import { VectorTile } from "@mapbox/vector-tile";
+import { ExtendedFeature } from "d3-geo";
+import {
+  Feature,
+  FeatureCollection,
+  Polygon,
+  MultiPolygon,
+} from "@turf/helpers";
+import {
+  waterarea,
+  contour,
+  road,
+  railway,
+  label,
+  symbol,
+} from "./vectorLayers";
+import { tileUrl } from "../utils";
+import type { CanvasMap } from "../canvasMap";
 
 interface Options {
   background: string;
-  backgroundFeature: Feature<Polygon | MultiPolygon> | FeatureCollection<Polygon | MultiPolygon> | null;
+  backgroundFeature:
+    | Feature<Polygon | MultiPolygon>
+    | FeatureCollection<Polygon | MultiPolygon>
+    | null;
 }
 
-export function vectorTiles(options?: Partial<Options>): (map: CanvasMap) => Promise<void> {
+export default function vectorTiles(
+  options?: Partial<Options>,
+): (map: CanvasMap) => Promise<void> {
   const opt: Options = {
-    background: options?.background ?? '#fff',
+    background: options?.background ?? "#fff",
     backgroundFeature: options?.backgroundFeature ?? null,
   };
 
   return async (map: CanvasMap) => {
     const url = `https://cyberjapandata.gsi.go.jp/xyz/experimental_bvmap/{z}/{x}/{y}.pbf`;
 
-    map.addAttribution('国土地理院');
+    map.addAttribution("国土地理院");
     const { width, height } = map.getSize();
     const projection = map.getProjection();
     const path = map.getPath();
@@ -46,38 +63,42 @@ export function vectorTiles(options?: Partial<Options>): (map: CanvasMap) => Pro
             const vt = new VectorTile(pbf);
             return layerNames.map((layerName) => {
               const layer = vt.layers[layerName.layerName];
-              const features: Feature[] = [];
+              const layerFeatures: Feature[] = [];
               if (layer) {
-                for (let i = 0; i < layer.length; i++) {
+                for (let i = 0; i < layer.length; i += 1) {
                   const feature = layer.feature(i);
-                  features.push(feature.toGeoJSON(x, y, z));
+                  layerFeatures.push(feature.toGeoJSON(x, y, z));
                 }
               }
-              return features;
+              return layerFeatures;
             });
           })
-          .catch(() => layerNames.map(() => []))
-      )
+          .catch(() => layerNames.map(() => [])),
+      ),
     );
-    const layers = layerNames.map((_, i) => features.map((feature) => feature[i]).reduce((accum, curr) => [...accum, ...curr], []));
+    const layers = layerNames.map((_, i) =>
+      features
+        .map((feature) => feature[i])
+        .reduce((accum, curr) => [...accum, ...curr], []),
+    );
 
-    if (opt.background !== 'none' && !opt.backgroundFeature) {
+    if (opt.background !== "none" && !opt.backgroundFeature) {
       context.fillStyle = opt.background;
       context.fillRect(0, 0, width, height);
     }
     if (opt.backgroundFeature) {
-      context.fillStyle = '#eee';
+      context.fillStyle = "#eee";
       context.fillRect(0, 0, width, height);
 
       context.beginPath();
       path(opt.backgroundFeature as ExtendedFeature);
-      context.fillStyle = '#fff';
+      context.fillStyle = "#fff";
       context.fill();
     }
 
-    layers.forEach((features, i) => {
+    layers.forEach((layerFeatures, i) => {
       const render = layerNames[i].render(map);
-      features.forEach((feature) => {
+      layerFeatures.forEach((feature) => {
         context.beginPath();
         path(feature as ExtendedFeature);
         render(feature);

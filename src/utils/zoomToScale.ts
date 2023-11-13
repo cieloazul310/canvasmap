@@ -1,5 +1,5 @@
 export function zoomToScale(zoom: number): number {
-  return (256 * Math.pow(2, zoom)) / (Math.PI * 2);
+  return (256 * 2 ** zoom) / (Math.PI * 2);
 }
 
 export function scaleToZoom(scale: number): number {

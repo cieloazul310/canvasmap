@@ -5,7 +5,11 @@ export interface Padding {
   left: number;
 }
 
-export function createPadding(width: number, height: number, padding?: Partial<Padding>): Padding {
+export function createPadding(
+  width: number,
+  height: number,
+  padding?: Partial<Padding>,
+): Padding {
   return {
     top: padding?.top ?? Math.round(height * 0.1),
     right: padding?.right ?? Math.round(width * 0.05),
