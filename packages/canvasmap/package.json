@@ -1,0 +1,60 @@
+{
+  "name": "@cieloazul310/canvasmap",
+  "description": "Generate plain map for data visualization.",
+  "version": "0.0.3",
+  "main": "lib/index.js",
+  "module": "module/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "@cieloazul310",
+    "url": "https://cieloazul310.github.io"
+  },
+  "keywords": [
+    "Data Visualization",
+    "D3.js",
+    "Canvas"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "ts-node --files src/index.ts",
+    "dev:watch": "ts-node-dev --respawn --files src/index.ts",
+    "clean": "git clean -fx lib/ module/",
+    "tsc": "tsc -p ./tsconfig.json && tsc -p ./tsconfig.mjs.json",
+    "build": "npm-run-all clean tsc",
+    "check-types": "tsc --noEmit",
+    "eslint": "eslint src/**/*.ts",
+    "eslint:fix": "eslint src/**/*.ts --fix",
+    "lint": "npm-run-all eslint check-types",
+    "lint:fix": "npm-run-all eslint:fix check-types format"
+  },
+  "dependencies": {
+    "@mapbox/vector-tile": "^1.3.1",
+    "@turf/bbox": "^6.5.0",
+    "@turf/bbox-polygon": "^6.5.0",
+    "@turf/helpers": "^6.5.0",
+    "@turf/rewind": "^6.5.0",
+    "canvas": "^2.11.2",
+    "d3-geo": "^2.0.1",
+    "d3-tile": "^1.0.0",
+    "pbf": "^3.2.1"
+  },
+  "devDependencies": {
+    "@cieloazul310/eslint-config-custom": "^0.0.3",
+    "@cieloazul310/tsconfig": "^0.0.3",
+    "@types/d3-geo": "^2.0.1",
+    "@types/node": "^20.9.0",
+    "@types/pbf": "^3.0.5",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.2.2"
+  }
+}

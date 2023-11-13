@@ -4,7 +4,7 @@
 /* eslint @typescript-eslint/no-unsafe-member-access: off */
 const fs = require('fs');
 const path = require('path');
-const { CanvasMap } = require('../dist');
+const { CanvasMap } = require("@cieloazul310/canvasmap");
 
 const geojson = JSON.parse(fs.readFileSync(path.resolve(__dirname, './data/ibaraki.geojson'), 'utf8'));
 const width = 800;

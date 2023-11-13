@@ -1,5 +1,6 @@
+/* eslint max-classes-per-file: off */
+
 declare module "d3-tile" {
-  /* eslint max-classes-per-file: warn */
   export function tile(): Tile;
 
   export interface Tile {
@@ -30,7 +31,6 @@ declare module "d3-tile" {
 }
 
 declare module "@mapbox/vector-tile" {
-  /* eslint max-classes-per-file: warn */
   import { Pbf } from "pbf";
   import { Feature } from "@turf/helpers";
 

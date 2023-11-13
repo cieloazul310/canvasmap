@@ -1,22 +1,22 @@
 import * as fs from "fs";
 import {
   createCanvas,
-  Canvas,
-  CanvasRenderingContext2D,
-  PngConfig,
-  JpegConfig,
+  type Canvas,
+  type CanvasRenderingContext2D,
+  type PngConfig,
+  type JpegConfig,
 } from "canvas";
 import {
   geoMercator,
   geoPath,
-  GeoProjection,
-  GeoPath,
-  ExtendedFeature,
+  type GeoProjection,
+  type GeoPath,
+  type ExtendedFeature,
 } from "d3-geo";
 import bbox from "@turf/bbox";
 import bboxPolygon from "@turf/bbox-polygon";
 import rewind from "@turf/rewind";
-import {
+import type {
   Feature,
   Polygon,
   MultiPolygon,
@@ -25,9 +25,24 @@ import {
 } from "@turf/helpers";
 import { rasterTiles, vectorTiles } from "./tilemap";
 import { renderTitle, renderAttribution } from "./utils/renderText";
-import { createPadding, Padding } from "./utils/createPadding";
-import { mapFontSize, MapFontSize } from "./utils/mapFontSize";
-import { zoomToScale } from "./utils/zoomToScale";
+import {
+  createPadding,
+  mapFontSize,
+  zoomToScale,
+  type Padding,
+  type MapFontSize,
+} from "./utils";
+
+function isFeature(
+  obj?: ExtendedFeature | FeatureCollection | Record<string, unknown>,
+): obj is ExtendedFeature {
+  return typeof obj === "object" && obj.type === "Feature";
+}
+function isFeatureCollection(
+  obj?: ExtendedFeature | FeatureCollection | Record<string, unknown>,
+): obj is FeatureCollection {
+  return typeof obj === "object" && obj.type === "FeatureCollection";
+}
 
 export interface CanvasMapOptions {
   padding: Padding;
@@ -44,17 +59,6 @@ export interface TileMapOptions {
     | Feature<Polygon | MultiPolygon>
     | FeatureCollection<Polygon | MultiPolygon>;
   attribution: string;
-}
-
-function isFeature(
-  obj?: ExtendedFeature | FeatureCollection | Record<string, unknown>,
-): obj is ExtendedFeature {
-  return typeof obj === "object" && obj.type === "Feature";
-}
-function isFeatureCollection(
-  obj?: ExtendedFeature | FeatureCollection | Record<string, unknown>,
-): obj is FeatureCollection {
-  return typeof obj === "object" && obj.type === "FeatureCollection";
 }
 
 export class CanvasMap {

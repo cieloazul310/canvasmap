@@ -1,5 +1,5 @@
 /* eslint @typescript-eslint/no-var-requires: off */
-const { CanvasMap } = require('../dist');
+const { CanvasMap } = require("@cieloazul310/canvasmap");
 
 const width = 800;
 const height = 800;

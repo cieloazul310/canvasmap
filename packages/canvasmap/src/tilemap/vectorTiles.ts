@@ -1,4 +1,3 @@
-import nodeFetch from "node-fetch";
 import { tile as d3tile } from "d3-tile";
 import Pbf from "pbf";
 import { VectorTile } from "@mapbox/vector-tile";
@@ -56,7 +55,7 @@ export default function vectorTiles(
     const layerNames = [waterarea, contour, road, railway, label, symbol];
     const features = await Promise.all(
       tiles.map(([x, y, z]) =>
-        nodeFetch(tileUrl(url)(x, y, z))
+        fetch(tileUrl(url)(x, y, z))
           .then((res) => res.arrayBuffer())
           .then((buffer) => new Pbf(buffer))
           .then((pbf) => {
