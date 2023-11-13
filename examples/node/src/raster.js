@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/no-var-requires: off */
 const { CanvasMap } = require("@cieloazul310/canvasmap");
 
 const width = 800;
@@ -9,8 +8,8 @@ const map = new CanvasMap(width, height, {
   title: 'Raster Tiles',
 });
 map
-  .renderBasemap('raster')
-  .then((map) => {
-    map.exportPng('./gallery/raster.png');
+  .renderBasemap("raster")
+  .then((canvas) => {
+    canvas.exportPng("./gallery/raster.png");
   })
   .catch((err) => console.error(err));

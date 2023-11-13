@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/no-var-requires: off */
 const { CanvasMap } = require("@cieloazul310/canvasmap");
 
 const width = 1200;
@@ -8,7 +7,7 @@ const map = new CanvasMap(width, height, {
   zoom: 13,
   title: 'Canvas Map for Data Visualization',
 });
-map.renderBasemap('vector').then((map) => {
-  map.exportPng('./gallery/basic.png');
+map.renderBasemap('vector').then((canvas) => {
+  canvas.exportPng("./gallery/basic.png");
 })
 .catch((err) => console.error(err));

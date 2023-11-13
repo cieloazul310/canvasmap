@@ -1,7 +1,3 @@
-/* eslint @typescript-eslint/no-var-requires: off */
-/* eslint @typescript-eslint/no-unsafe-assignment: off */
-/* eslint @typescript-eslint/no-unsafe-call: off */
-/* eslint @typescript-eslint/no-unsafe-member-access: off */
 const fs = require('fs');
 const path = require('path');
 const { CanvasMap } = require("@cieloazul310/canvasmap");
@@ -14,9 +10,9 @@ const map = new CanvasMap(width, height, geojson, {
   title: 'MultiPolygon as Background',
 });
 map
-  .renderBasemap('vector', { backgroundFeature: geojson })
-  .then((map) => {
-    map.addAttribution('国土数値情報');
-    map.exportPng('./gallery/bgPolygon.png');
+  .renderBasemap("vector", { backgroundFeature: geojson })
+  .then((canvas) => {
+    canvas.addAttribution("国土数値情報");
+    canvas.exportPng("./gallery/bgPolygon.png");
   })
   .catch((err) => console.error(err));

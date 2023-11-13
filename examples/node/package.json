@@ -11,5 +11,9 @@
   },
   "dependencies": {
     "@cieloazul310/canvasmap": "^0.0.3"
+  },
+  "devDependencies": {
+    "@cieloazul310/eslint-config-custom": "^0.0.3",
+    "@cieloazul310/tsconfig": "^0.0.3"
   }
 }

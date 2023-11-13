@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/no-var-requires: off */
 const { CanvasMap } = require("@cieloazul310/canvasmap");
 
 (async () => {
@@ -7,9 +6,9 @@ const { CanvasMap } = require("@cieloazul310/canvasmap");
   const map = new CanvasMap(width, height, {
     center: [139.701175, 35.720874],
     zoom: 14,
-    title: 'Async',
+    title: "Async",
   });
-  await map.renderBasemap('vector').then((map) => {
-    map.exportPng('./gallery/async.png');
+  await map.renderBasemap("vector").then((canvas) => {
+    canvas.exportPng("./gallery/async.png");
   });
 })().catch((err) => console.error(err));

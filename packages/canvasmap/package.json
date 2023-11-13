@@ -5,8 +5,23 @@
   "main": "lib/index.js",
   "module": "module/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./module/index.d.ts",
+        "default": "./module/index.js"
+      },
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      },
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
-    "lib"
+    "lib",
+    "module"
   ],
   "license": "MIT",
   "author": {
@@ -51,7 +66,6 @@
     "@cieloazul310/eslint-config-custom": "^0.0.3",
     "@cieloazul310/tsconfig": "^0.0.3",
     "@types/d3-geo": "^2.0.1",
-    "@types/node": "^20.9.0",
     "@types/pbf": "^3.0.5",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
