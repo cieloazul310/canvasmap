@@ -5,9 +5,11 @@ const height = 630;
 const map = new CanvasMap(width, height, {
   center: [140.4602, 36.3703],
   zoom: 13,
-  title: 'Canvas Map for Data Visualization',
+  title: "Canvas Map for Data Visualization",
 });
-map.renderBasemap('vector').then((canvas) => {
-  canvas.exportPng("./dist/basic.png");
-})
-.catch((err) => console.error(err));
+map
+  .renderBasemap("vector")
+  .then((canvas) => {
+    canvas.exportPng("./dist/basic.png");
+  })
+  .catch((err) => console.error(err));

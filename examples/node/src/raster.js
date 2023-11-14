@@ -5,7 +5,7 @@ const height = 800;
 const map = new CanvasMap(width, height, {
   center: [140.4602, 36.3703],
   zoom: 10,
-  title: 'Raster Tiles',
+  title: "Raster Tiles",
 });
 map
   .renderBasemap("raster")

@@ -1,13 +1,15 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 const { CanvasMap } = require("@cieloazul310/canvasmap");
 
-const geojson = JSON.parse(fs.readFileSync(path.resolve(__dirname, './data/ibaraki.geojson'), 'utf8'));
+const geojson = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "./data/ibaraki.geojson"), "utf8"),
+);
 
 const width = 800;
 const height = 800;
 const map = new CanvasMap(width, height, geojson, {
-  title: 'MultiPolygon as Background',
+  title: "MultiPolygon as Background",
 });
 map
   .renderBasemap("vector", { backgroundFeature: geojson })

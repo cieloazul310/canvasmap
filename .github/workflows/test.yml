@@ -1,14 +1,13 @@
 name: Test
 on:
-  push:
-  # pull_request:
-  #  types: [opened, synchronize]
-  #  paths:
-  #    - package.json
-  #    - examples/*/**/src/**
-  #    - packages/*/**/src/**
-  #    - packages/*/**/package.json
-  #    - .github/workflows/test.yml
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - package.json
+      - examples/*/**/src/**
+      - packages/*/**/src/**
+      - packages/*/**/package.json
+      - .github/workflows/test.yml
 
 jobs:
   test:

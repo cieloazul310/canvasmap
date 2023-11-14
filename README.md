@@ -4,11 +4,9 @@ Canvas マップ -データビジュアライゼーションのための
 
 [![npm version](https://badge.fury.io/js/%40cieloazul310%2Fcanvasmap.svg)](https://badge.fury.io/js/%40cieloazul310%2Fcanvasmap)
 
-![Gallery](gallery/basic.png)
-
 ## How to Use
 
-```typescript
+```js
 const { CanvasMap } = require('@cieloazul310/canvasmap');
 
 const width = 1000;
@@ -23,7 +21,7 @@ map.renderBasemap('vector')
 ## Installing
 
 ```sh
-yarn add @cieloazul310/canvasmap
+npm install @cieloazul310/canvasmap
 ```
 
 ## API Reference

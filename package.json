@@ -10,8 +10,8 @@
   ],
   "scripts": {
     "build:package": "npm run build --workspace=@cieloazul310/canvasmap",
-    "test:examples": "npm run generate --workspace=node --workspace=ts-node",
-    "format": "prettier \"packages/*/**/src/**/*.{js,ts}\" --parser typescript --write",
+    "test:examples": "npm run generate --workspace=node-example --workspace=ts-node-example",
+    "format": "prettier \"{examples,packages}/*/**/src/**/*.{js,mjs,cjs,ts}\" --parser typescript --write",
     "lint-staged": "lint-staged",
     "prepare": "git config --local core.hooksPath .githooks"
   },
