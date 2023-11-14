@@ -4,6 +4,10 @@ import { getCollection } from "astro:content";
 import Layout from "../layout/index.astro";
 
 const places = await getCollection("place");
+const href = (id: string) => {
+  if (import.meta.env.PROD) return `/canvasmap/${id}`;
+  return `/${id}`;
+}
 ---
 
 <Layout title="Astro with CanvasMap">
@@ -12,7 +16,7 @@ const places = await getCollection("place");
     {
       places.map(({ id, data }) => (
         <li>
-          <a href={`/canvasmap/${id}`}>
+          <a href={href(id)}>
             <h2>{data.name}</h2>
           </a>
         </li>
