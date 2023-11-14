@@ -1,0 +1,39 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import { getCollection } from "astro:content";
+import { CanvasMap } from "@cieloazul310/canvasmap";
+import Layout from "../layout/index.astro";
+
+export const getStaticPaths = (async () => {
+  const places = await getCollection("place");
+
+  return places.map(({ id, data }) => ({
+    params: {
+      slug: id,
+    },
+    props: {
+      ...data,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { name, lon, lat } = Astro.props;
+
+const map = new CanvasMap(1200, 1200, {
+  center: [lon, lat],
+  zoom: 14,
+  title: name,
+});
+await map.renderBasemap("vector");
+---
+
+<Layout title={name}>
+  <h1>{name}</h1>
+  <img class="map" src={map.getCanvas().toDataURL()} />
+</Layout>
+<style>
+  .map {
+    max-width: 100%;
+  }
+</style>

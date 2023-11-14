@@ -1,0 +1,20 @@
+{
+  "name": "@cieloazul310/eslint-config-custom",
+  "version": "0.0.3",
+  "private": true,
+  "main": "index.cjs",
+  "files": [
+    "index.cjs"
+  ],
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "@typescript-eslint/parser": "^6.10.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.29.0"
+  },
+  "peerDependencies": {
+    "eslint": "^8.0.0"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "extends": "@cieloazul310/tsconfig/base",
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
+  "include": ["src", ".eslintrc.cjs"]
+}

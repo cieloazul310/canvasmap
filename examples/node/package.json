@@ -1,0 +1,20 @@
+{
+  "name": "node-example",
+  "private": true,
+  "version": "0.0.3",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "generate": "node ./src/basic.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@cieloazul310/canvasmap": "^0.0.3"
+  },
+  "devDependencies": {
+    "@cieloazul310/eslint-config-custom": "^0.0.3",
+    "@cieloazul310/tsconfig": "^0.0.3"
+  }
+}

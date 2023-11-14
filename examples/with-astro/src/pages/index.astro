@@ -1,0 +1,22 @@
+---
+/* eslint import/no-unresolved: off */
+import { getCollection } from "astro:content";
+import Layout from "../layout/index.astro";
+
+const places = await getCollection("place");
+---
+
+<Layout title="Astro with CanvasMap">
+  <h1>Astro with CanvasMap</h1>
+  <ul>
+    {
+      places.map(({ id, data }) => (
+        <li>
+          <a href={`/canvasmap/${id}`}>
+            <h2>{data.name}</h2>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>
