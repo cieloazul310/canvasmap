@@ -11,11 +11,14 @@
   "scripts": {
     "build:package": "npm run build --workspace=@cieloazul310/canvasmap",
     "test:examples": "npm run generate --workspace=node-example --workspace=ts-node-example",
+    "changeset": "changeset",
+    "publish-packages": "npm run build:package && changeset version && changeset publish",
     "format": "prettier \"{examples,packages}/*/**/src/**/*.{js,mjs,cjs,ts}\" --parser typescript --write",
     "lint-staged": "lint-staged",
     "prepare": "git config --local core.hooksPath .githooks"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.2",
     "@types/node": "^20.9.0",
     "eslint": "^8.53.0",
     "lint-staged": "^15.1.0",
