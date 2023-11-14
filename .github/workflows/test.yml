@@ -9,6 +9,9 @@ on:
       - packages/*/**/package.json
       - .github/workflows/test.yml
 
+env:
+  BUILD_PATH: "./examples/with-astro" # default value when not using subfolders
+
 jobs:
   test:
     name: Test
@@ -57,3 +60,8 @@ jobs:
         run: |
           du -sh ${{ github.workspace }}/examples/node/dist/basic.png
           du -sh ${{ github.workspace }}/examples/ts-node/dist/basic.png
+
+      - name: Build with Astro
+        run: |
+          ${{ steps.detect-package-manager.outputs.runner }} astro build
+        working-directory: ${{ env.BUILD_PATH }}

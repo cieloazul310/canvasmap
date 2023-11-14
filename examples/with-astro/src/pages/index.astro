@@ -12,7 +12,7 @@ const places = await getCollection("place");
     {
       places.map(({ id, data }) => (
         <li>
-          <a href={`/${id}`}>
+          <a href={`/canvasmap/${id}`}>
             <h2>{data.name}</h2>
           </a>
         </li>
