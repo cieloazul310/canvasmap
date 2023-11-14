@@ -1,4 +1,5 @@
 ---
+import * as path from "path";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { getCollection } from "astro:content";
 import { CanvasMap } from "@cieloazul310/canvasmap";
@@ -12,25 +13,30 @@ export const getStaticPaths = (async () => {
       slug: id,
     },
     props: {
+      id,
       ...data,
     },
   }));
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-const { name, lon, lat } = Astro.props;
+const { id, name, lon, lat } = Astro.props;
 
+const filename = `${id}.png`;
 const map = new CanvasMap(1200, 1200, {
   center: [lon, lat],
   zoom: 14,
   title: name,
 });
-await map.renderBasemap("vector");
+await map.renderBasemap("vector")
+  .then((canvas) => {
+    canvas.exportPng(path.resolve("./public", filename));
+  });
 ---
 
 <Layout title={name}>
   <h1>{name}</h1>
-  <img class="map" src={map.getCanvas().toDataURL()} />
+  <img class="map" src={filename} />
 </Layout>
 <style>
   .map {
