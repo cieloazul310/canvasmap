@@ -29,6 +29,7 @@ import {
   createPadding,
   mapFontSize,
   zoomToScale,
+  paletteConfigForPng,
   type Padding,
   type MapFontSize,
 } from "./utils";
@@ -205,7 +206,11 @@ export class CanvasMap {
   public exportPng(file: string, config?: PngConfig): CanvasMap {
     if (!this.state.textRendered) this.renderText();
     const canvas = this.getCanvas();
-    const buffer = canvas.toBuffer("image/png", config);
+    const buffer = canvas.toBuffer("image/png", {
+      palette: paletteConfigForPng,
+      backgroundIndex: 0,
+      ...config,
+    });
     fs.writeFileSync(file, buffer);
     console.log(`${file} exported!`);
 
