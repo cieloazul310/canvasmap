@@ -132,3 +132,9 @@ dist
 junk
 lib
 module
+
+# generated types
+.astro/
+
+# macOS-specific files
+.DS_Store
