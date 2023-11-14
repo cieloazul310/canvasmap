@@ -1,7 +1,7 @@
 {
   "name": "with-astro",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -10,11 +10,11 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@cieloazul310/canvasmap": "^0.0.3",
+    "@cieloazul310/canvasmap": "^0.0.4",
     "astro": "^3.5.3"
   },
   "devDependencies": {
-    "@cieloazul310/eslint-config-custom": "^0.0.3",
+    "@cieloazul310/eslint-config-custom": "^0.0.4",
     "eslint-plugin-astro": "^0.29.1",
     "prettier-plugin-astro": "^0.12.2"
   }
