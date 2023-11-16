@@ -8,10 +8,11 @@ const geojson = JSON.parse(
 
 const width = 800;
 const height = 800;
-const map = new CanvasMap(width, height, geojson, {
+const map = new CanvasMap(width, height, {
   title: "MultiPolygon as Background",
 });
 map
+  .setProjectionFitExtent(geojson)
   .renderBasemap("vector", { backgroundFeature: geojson })
   .then((canvas) => {
     canvas.addAttribution("国土数値情報");

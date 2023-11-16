@@ -1,0 +1,10 @@
+{
+  "extends": "@cieloazul310/tsconfig/base",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./lib"
+  },
+  "include": ["src"],
+  "exclude": ["**/__tests__/*"]
+}

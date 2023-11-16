@@ -3,17 +3,11 @@ import * as path from "path";
 import {
   createCanvas,
   type Canvas,
-  type CanvasRenderingContext2D,
   type PngConfig,
   type JpegConfig,
 } from "canvas";
-import {
-  geoMercator,
-  geoPath,
-  type GeoProjection,
-  type GeoPath,
-  type ExtendedFeature,
-} from "d3-geo";
+import { geoMercator, type GeoProjection, type ExtendedFeature } from "d3-geo";
+import { tile as d3tile, type Tiles } from "d3-tile";
 import bbox from "@turf/bbox";
 import bboxPolygon from "@turf/bbox-polygon";
 import rewind from "@turf/rewind";
@@ -24,33 +18,31 @@ import type {
   Position,
   FeatureCollection,
 } from "@turf/helpers";
-import { rasterTiles, vectorTiles } from "./tilemap";
-import { renderTitle, renderAttribution } from "./utils/renderText";
 import {
-  createPadding,
-  mapFontSize,
+  rasterTiles,
+  vectorTiles,
+  renderAttribution,
+  renderTitle,
+} from "@cieloazul310/canvasmap-styles";
+import {
+  defineTheme,
   zoomToScale,
-  type Padding,
-  type MapFontSize,
-} from "./utils";
+  type Theme,
+  type DefineThemeOptions,
+} from "@cieloazul310/canvasmap-utils";
 
 function isFeature(
   obj?: ExtendedFeature | FeatureCollection | Record<string, unknown>,
 ): obj is ExtendedFeature {
   return typeof obj === "object" && obj.type === "Feature";
 }
-function isFeatureCollection(
-  obj?: ExtendedFeature | FeatureCollection | Record<string, unknown>,
-): obj is FeatureCollection {
-  return typeof obj === "object" && obj.type === "FeatureCollection";
-}
 
-export interface CanvasMapOptions {
-  padding: Padding;
+export type CanvasMapOptions = {
   center: Position;
   zoom: number;
   title: string;
-}
+  theme: Omit<DefineThemeOptions, "width" | "height">;
+};
 
 export interface TileMapOptions {
   tileUrl: string;
@@ -63,105 +55,84 @@ export interface TileMapOptions {
 }
 
 export class CanvasMap {
-  size: { width: number; height: number };
+  private canvas: Canvas;
 
-  padding: Padding;
+  private projection: GeoProjection;
 
-  canvas: Canvas;
+  private tiles: Tiles;
 
-  context: CanvasRenderingContext2D;
+  private theme: Theme;
 
-  projection: GeoProjection;
+  private title: string | undefined;
 
-  path: GeoPath;
+  private attribution: string[] = [];
 
-  options: Partial<CanvasMapOptions> & {
-    basemap: "raster" | "vector";
-    attribution: string;
-  };
-
-  attribution: string[] = [];
-
-  fontSize: MapFontSize;
-
-  state: { textRendered: boolean } = { textRendered: false };
+  private state: { textRendered: boolean } = { textRendered: false };
 
   constructor(
     width: number,
     height: number,
-    object?: ExtendedFeature | FeatureCollection | Partial<CanvasMapOptions>,
     options?: Partial<CanvasMapOptions>,
   ) {
-    this.size = { width, height };
     this.canvas = createCanvas(width, height);
-    this.context = this.canvas.getContext("2d");
-    this.fontSize = mapFontSize(width, height);
-    this.options = {
-      basemap: "vector",
-      attribution: "国土地理院",
-      ...(isFeature(object) || isFeatureCollection(object) ? options : object),
-    };
+    this.theme = defineTheme({ width, height, ...options?.theme });
 
-    this.padding = this.options.padding ?? createPadding(width, height);
-    this.projection =
-      isFeature(object) || isFeatureCollection(object)
-        ? geoMercator().fitExtent(
-            [
-              [this.padding.left, this.padding.top],
-              [width - this.padding.right, height - this.padding.bottom],
-            ],
-            isFeature(object)
-              ? object
-              : rewind(bboxPolygon(bbox(object)), { reverse: true }),
-          )
-        : geoMercator();
+    this.projection = geoMercator();
+    this.setCenter(options?.center).setZoom(options?.zoom);
 
-    if (
-      !isFeature(object) &&
-      !isFeatureCollection(object) &&
-      this.options.center
-    ) {
+    this.tiles = this.updateTiles();
+
+    this.setTitle(options?.title);
+  }
+
+  private updateTiles() {
+    const { width, height } = this.canvas;
+    const tile = d3tile()
+      .size([width, height])
+      .scale(this.projection.scale() * Math.PI * 2)
+      .translate(this.projection([0, 0]) ?? [0, 0]);
+    return tile();
+  }
+
+  public setCenter(center?: Position): CanvasMap {
+    const { width, height } = this.canvas;
+    if (center) {
       this.projection
-        .center(this.options.center as [number, number])
+        .center(center as [number, number])
         .translate([width / 2, height / 2]);
     }
-    if (this.options.zoom) {
-      this.projection.scale(zoomToScale(this.options.zoom));
+    this.tiles = this.updateTiles();
+    return this;
+  }
+
+  public setZoom(zoom?: number): CanvasMap {
+    if (zoom) {
+      this.projection.scale(zoomToScale(zoom));
     }
-
-    this.path = geoPath(this.projection, this.context);
+    this.tiles = this.updateTiles();
+    return this;
   }
 
-  public getSize(): { width: number; height: number } {
-    return this.size;
+  public setProjectionFitExtent(
+    feature: ExtendedFeature | FeatureCollection,
+  ): CanvasMap {
+    const { width, height } = this.canvas;
+    this.projection.fitExtent(
+      [
+        [this.theme.padding.left, this.theme.padding.top],
+        [width - this.theme.padding.right, height - this.theme.padding.bottom],
+      ],
+      isFeature(feature)
+        ? feature
+        : rewind(bboxPolygon(bbox(feature)), { reverse: true }),
+    );
+    this.tiles = this.updateTiles();
+    return this;
   }
 
-  public getPadding(): Padding {
-    return this.padding;
-  }
-
-  public getProjection(): GeoProjection {
-    return this.projection;
-  }
-
-  public getPath(): GeoPath {
-    return this.path;
-  }
-
-  public getContext(): CanvasRenderingContext2D {
-    return this.context;
-  }
-
-  public getCanvas(): Canvas {
-    return this.canvas;
-  }
-
-  public getCanvasMapOptions(): Partial<CanvasMapOptions> {
-    return this.options;
-  }
-
-  public getMapFontSize(): MapFontSize {
-    return this.fontSize;
+  public setTitle(title?: string): CanvasMap {
+    this.title = title;
+    return this;
   }
 
   public addAttribution(attribution: string): CanvasMap {
@@ -172,32 +143,40 @@ export class CanvasMap {
 
   public async renderBasemap(
     type: "vector" | "raster",
-    options?: Partial<TileMapOptions>,
+    { background, backgroundFeature, tileUrl }: Partial<TileMapOptions> = {},
   ): Promise<CanvasMap> {
+    const context = this.canvas.getContext("2d");
+    const { width, height } = this.canvas;
+
     if (type === "vector") {
-      await vectorTiles({
-        background: options?.background,
-        backgroundFeature: options?.backgroundFeature,
-      })(this);
+      await vectorTiles(context, {
+        width,
+        height,
+        projection: this.projection,
+        tiles: this.tiles,
+        theme: this.theme,
+        backgroundColor: background,
+        backgroundFeature,
+      });
     } else {
-      await rasterTiles(
-        options?.tileUrl ??
-          "https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png",
-        {
-          grayScale: options?.rasterGrayScale ?? false,
-          attribution: options?.attribution,
-        },
-      )(this);
+      await rasterTiles(context, { tiles: this.tiles, url: tileUrl });
     }
     return this;
   }
 
   private renderText(): CanvasMap {
-    if (this.options.title) {
-      renderTitle(this.options.title)(this);
+    const { width, height } = this.canvas;
+    const context = this.canvas.getContext("2d");
+    if (this.title) {
+      renderTitle(context, { width, title: this.title, theme: this.theme });
     }
     if (this.attribution.length) {
-      renderAttribution(this.attribution.join(", "))(this);
+      renderAttribution(context, {
+        attribution: this.attribution.join(", "),
+        width,
+        height,
+        theme: this.theme,
+      });
     }
     this.state.textRendered = true;
     return this;
@@ -205,7 +184,7 @@ export class CanvasMap {
 
   public exportPng(file: string, config?: PngConfig): CanvasMap {
     if (!this.state.textRendered) this.renderText();
-    const canvas = this.getCanvas();
+    const { canvas } = this;
     const buffer = canvas.toBuffer("image/png", config);
     const dir = path.dirname(file);
     if (!fs.existsSync(dir)) {
@@ -220,7 +199,7 @@ export class CanvasMap {
 
   public exportJpg(file: string, config?: JpegConfig): CanvasMap {
     this.renderText();
-    const canvas = this.getCanvas();
+    const { canvas } = this;
     const buffer = canvas.toBuffer("image/jpeg", config);
     const dir = path.dirname(file);
     if (!fs.existsSync(dir)) {

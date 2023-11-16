@@ -1,11 +1,11 @@
-export interface Padding {
+export type Padding = {
   top: number;
   right: number;
   bottom: number;
   left: number;
 }
 
-export function createPadding(
+export function definePadding(
   width: number,
   height: number,
   padding?: Partial<Padding>,

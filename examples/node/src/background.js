@@ -11,10 +11,11 @@ const [mito] = geojson.features.filter(
 
 const width = 800;
 const height = 800;
-const map = new CanvasMap(width, height, mito, {
+const map = new CanvasMap(width, height, {
   title: "Feature as Background",
 });
 map
+  .setProjectionFitExtent(mito)
   .renderBasemap("vector", { backgroundFeature: mito })
   .then((canvas) => {
     canvas.addAttribution("国土数値情報");
