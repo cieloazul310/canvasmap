@@ -10,7 +10,15 @@ import type {
   MultiPolygon,
 } from "@turf/helpers";
 import { tileUrl, type Theme } from "@cieloazul310/canvasmap-utils";
-import { waterarea, contour, road, railway, label, symbol } from "./layers";
+import {
+  waterarea,
+  building,
+  contour,
+  road,
+  railway,
+  label,
+  symbol,
+} from "./layers";
 
 export type VectorTilesOptions = {
   backgroundColor?: string;
@@ -40,7 +48,15 @@ async function vectorTiles(
   const url = `https://cyberjapandata.gsi.go.jp/xyz/experimental_bvmap/{z}/{x}/{y}.pbf`;
   const path = geoPath(projection, context);
 
-  const layerNames = [waterarea, contour, road, railway, label, symbol];
+  const layerNames = [
+    waterarea,
+    contour,
+    road,
+    railway,
+    building,
+    label,
+    symbol,
+  ];
 
   /**
    * Load features from specified layers.

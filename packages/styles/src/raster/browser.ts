@@ -19,7 +19,12 @@ async function rasterTilesBrowser(
 
   const images = (await Promise.all(
     tiles.map(([x, y, z]) =>
-      fetch(tileUrl(tile)(x, y, z))
+      new Promise<HTMLImageElement>((resolve, reject) => {
+        const image = new Image();
+        image.onerror = reject;
+        image.onload = () => resolve(image);
+        image.src = tileUrl(tile)(x, y, z);
+      })
         .then((image) => [x, y, image])
         .catch(() => [x, y, null]),
     ),

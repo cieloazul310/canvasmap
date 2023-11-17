@@ -30,7 +30,7 @@ export type CanvasMapBaseOptions = {
   theme: Omit<DefineThemeOptions, "width" | "height">;
 };
 
-export interface TileMapOptions {
+export type TileMapOptions = {
   tileUrl: string;
   rasterGrayScale: boolean;
   background: string;
@@ -38,7 +38,7 @@ export interface TileMapOptions {
     | Feature<Polygon | MultiPolygon>
     | FeatureCollection<Polygon | MultiPolygon>;
   attribution: string;
-}
+};
 
 class CanvasMapBase {
   public width: number;
@@ -124,14 +124,28 @@ class CanvasMapBase {
     return this;
   }
 
+  public setTheme(theme: Omit<DefineThemeOptions, "width" | "height">) {
+    const { width, height } = this;
+    this.theme = defineTheme({ width, height, ...theme });
+  }
+
   public addAttribution(attribution: string) {
     if (!this.attribution.includes(attribution))
       this.attribution.push(attribution);
     return this;
   }
 
+  public getSize() {
+    const { width, height } = this;
+    return { width, height };
+  }
+
   public getProjection() {
     return this.projection;
+  }
+
+  public getTiles() {
+    return this.tiles;
   }
 }
 

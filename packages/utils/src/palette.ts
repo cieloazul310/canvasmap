@@ -10,6 +10,7 @@ export type Palette = {
     highway: string;
     base: string;
   };
+  building: string;
   contour: string;
   label: {
     terrain: string;
@@ -31,6 +32,7 @@ export const defaultPalette: Palette = {
     highway: "#cdc",
     base: "#ddd",
   },
+  building: "#eed",
   contour: "#cba",
   label: {
     terrain: "#977",
