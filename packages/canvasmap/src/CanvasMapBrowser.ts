@@ -8,6 +8,8 @@ import {
 import CanvasMapBase, {
   type CanvasMapBaseOptions,
   type TileMapOptions,
+  type VectorMapOptions,
+  type RasterMapOptions,
 } from "./CanvasMapBase";
 
 export type CanvasMapBrowserOptions = CanvasMapBaseOptions;
@@ -27,6 +29,44 @@ class CanvasMapBrowser extends CanvasMapBase {
     this.canvas.height = height;
   }
 
+  public async renderVectorMap({
+    background,
+    backgroundFeature,
+  }: Partial<VectorMapOptions> = {}) {
+    const context = this.canvas.getContext("2d");
+    const { width, height } = this.canvas;
+    if (!context) return this;
+
+    await vectorTiles(context, {
+      width,
+      height,
+      projection: this.projection,
+      tiles: this.tiles,
+      theme: this.theme,
+      backgroundColor: background,
+      backgroundFeature,
+    });
+    return this;
+  }
+
+  public async renderRasterMap({ tileUrl }: Partial<RasterMapOptions> = {}) {
+    const context = this.canvas.getContext("2d");
+    const { width, height } = this.canvas;
+    if (!context) return this;
+
+    await rasterTilesBrowser(context, {
+      tiles: this.tiles,
+      url: tileUrl,
+      width,
+      height,
+    });
+    return this;
+  }
+
+  /**
+   * @deprecated
+   * migrate to `renderVectorMap` or `renderRasterMap`
+   */
   public async renderBasemap(
     type: "vector" | "raster",
     {
@@ -38,7 +78,7 @@ class CanvasMapBrowser extends CanvasMapBase {
   ) {
     const context = this.canvas.getContext("2d");
     const { width, height } = this.canvas;
-    if (!context) return;
+    if (!context) return this;
 
     if (type === "vector") {
       await vectorTiles(context, {
@@ -59,6 +99,7 @@ class CanvasMapBrowser extends CanvasMapBase {
         height: this.height,
       });
     }
+    return this;
   }
 
   public renderText(): CanvasMapBrowser {

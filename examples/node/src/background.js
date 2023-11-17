@@ -16,7 +16,7 @@ const map = new CanvasMap(width, height, {
 });
 map
   .setProjectionFitExtent(mito)
-  .renderBasemap("vector", { backgroundFeature: mito })
+  .renderVectorMap({ backgroundFeature: mito })
   .then((canvas) => {
     canvas.addAttribution("国土数値情報");
     canvas.exportPng("./dist/background.png");

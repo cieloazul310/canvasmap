@@ -16,6 +16,8 @@ import {
 import CanvasMapBase, {
   type CanvasMapBaseOptions,
   type TileMapOptions,
+  type VectorMapOptions,
+  type RasterMapOptions,
 } from "./CanvasMapBase";
 
 export type CanvasMapOptions = CanvasMapBaseOptions;
@@ -46,6 +48,40 @@ class CanvasMap extends CanvasMapBase {
     return geoPath(this.projection, context);
   }
 
+  public async renderVectorMap({
+    background,
+    backgroundFeature,
+  }: Partial<VectorMapOptions> = {}) {
+    const context = this.canvas.getContext("2d");
+    const { width, height } = this.canvas;
+    await vectorTiles(context, {
+      width,
+      height,
+      projection: this.projection,
+      tiles: this.tiles,
+      theme: this.theme,
+      backgroundColor: background,
+      backgroundFeature,
+    });
+    return this;
+  }
+
+  public async renderRasterMap({ tileUrl }: Partial<RasterMapOptions> = {}) {
+    const context = this.canvas.getContext("2d");
+    const { width, height } = this.canvas;
+    await rasterTilesNode(context, {
+      tiles: this.tiles,
+      url: tileUrl,
+      width,
+      height,
+    });
+    return this;
+  }
+
+  /**
+   * @deprecated
+   * migrate to `renderVectorMap` or `renderRasterMap`
+   */
   public async renderBasemap(
     type: "vector" | "raster",
     { background, backgroundFeature, tileUrl }: Partial<TileMapOptions> = {},

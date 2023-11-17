@@ -9,7 +9,7 @@ const map = new CanvasMapBrowser(width, height, {
   title: "Canvas Map for Data Visualization",
 });
 
-await map.renderBasemap("vector");
+await map.renderVectorMap();
 
 const container = document.getElementById("map");
 if (container) {

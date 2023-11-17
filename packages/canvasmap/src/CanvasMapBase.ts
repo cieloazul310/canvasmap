@@ -30,15 +30,21 @@ export type CanvasMapBaseOptions = {
   theme: Omit<DefineThemeOptions, "width" | "height">;
 };
 
-export type TileMapOptions = {
-  tileUrl: string;
-  rasterGrayScale: boolean;
+export type VectorMapOptions = {
   background: string;
   backgroundFeature:
     | Feature<Polygon | MultiPolygon>
     | FeatureCollection<Polygon | MultiPolygon>;
   attribution: string;
 };
+
+export type RasterMapOptions = {
+  tileUrl: string;
+  rasterGrayScale: boolean;
+  attribution: string;
+};
+
+export type TileMapOptions = VectorMapOptions & RasterMapOptions;
 
 class CanvasMapBase {
   public width: number;

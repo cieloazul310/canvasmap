@@ -12,7 +12,7 @@ const map = new CanvasMap(width, height, {
 });
 map
   .setProjectionFitExtent(geojson)
-  .renderBasemap("vector")
+  .renderVectorMap()
   .then((canvas) => {
     const context = canvas.getContext();
     const geoPath = canvas.getPath();
