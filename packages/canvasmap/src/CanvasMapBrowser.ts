@@ -18,7 +18,7 @@ class CanvasMapBrowser extends CanvasMapBase {
   constructor(
     width: number,
     height: number,
-    options?: CanvasMapBrowserOptions,
+    options?: Partial<CanvasMapBrowserOptions>,
   ) {
     super(width, height, options);
 
