@@ -40,8 +40,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "ts-node --files src/index.ts",
-    "dev:watch": "ts-node-dev --respawn --files src/index.ts",
+    "dev": "ts-node-dev --respawn --files src/index.ts",
     "clean": "git clean -fx lib/ module/",
     "tsc": "tsc -p ./tsconfig.json && tsc -p ./tsconfig.mjs.json",
     "build": "npm-run-all clean tsc",
