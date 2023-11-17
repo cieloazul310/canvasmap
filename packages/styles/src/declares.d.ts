@@ -32,7 +32,7 @@ declare module "d3-tile" {
 
 declare module "@mapbox/vector-tile" {
   import { Pbf } from "pbf";
-  import { Feature } from "@turf/helpers";
+  import type { Feature } from "@turf/helpers";
 
   class VectorTileFeature {
     type: number;

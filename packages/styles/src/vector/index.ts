@@ -3,7 +3,7 @@ import Pbf from "pbf";
 import { VectorTile } from "@mapbox/vector-tile";
 import { geoPath, type ExtendedFeature, type GeoProjection } from "d3-geo";
 import type { CanvasRenderingContext2D as NodeCanvasRenderingContext2D } from "canvas";
-import {
+import type {
   Feature,
   FeatureCollection,
   Polygon,

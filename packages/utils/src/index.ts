@@ -1,4 +1,3 @@
-export * from "./context";
 export { default as hexToRgb } from "./hexToRgb";
 export * from "./mapFontSizes";
 export * from "./palette";
