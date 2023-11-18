@@ -36,7 +36,7 @@ export function getLayerNames() {
   return layerNames.filter((layerName) => {
     const el = document.querySelector<HTMLInputElement>(`#${layerName}`);
     if (!el) return true;
-    
+
     return el.checked;
   });
 }

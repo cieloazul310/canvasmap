@@ -3,9 +3,12 @@ export type MapFontSizes = {
   small: number;
   large: number;
   attribution: number;
-}
+};
 
-export function defineMapFontSizes(width: number, height: number): MapFontSizes {
+export function defineMapFontSizes(
+  width: number,
+  height: number,
+): MapFontSizes {
   return {
     default: Math.round(width * 0.0075),
     small: Math.round(width * 0.006),

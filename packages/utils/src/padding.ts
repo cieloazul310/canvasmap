@@ -3,7 +3,7 @@ export type Padding = {
   right: number;
   bottom: number;
   left: number;
-}
+};
 
 export function definePadding(
   width: number,

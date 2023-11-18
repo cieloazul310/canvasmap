@@ -17,7 +17,8 @@ function getView() {
   const y = document.querySelector<HTMLInputElement>("#lat");
   const z = document.querySelector<HTMLInputElement>("#zoom");
 
-  if (!x?.value || !y?.value || !z?.value) return { lon: 140.4602, lat: 36.3703, zoom: 15 };
+  if (!x?.value || !y?.value || !z?.value)
+    return { lon: 140.4602, lat: 36.3703, zoom: 15 };
   return {
     lon: parseFloat(x.value),
     lat: parseFloat(y.value),
