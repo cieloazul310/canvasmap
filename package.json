@@ -34,7 +34,7 @@
     "typescript": "^5.2.2"
   },
   "lint-staged": {
-    "{examples,packages}/*/**/src/*/**/*.{cjs,mjs,js,ts}": [
+    "{examples,packages}/*/**/*.{cjs,mjs,js,ts}": [
       "eslint --fix",
       "prettier --parser typescript --write"
     ]
