@@ -1,11 +1,133 @@
 <html lang="ja">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>CanvasMap browser example</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+      .main {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 100%;
+      }
+      .sidebar {
+        width: 280px;
+        height: 100%;
+        padding: 0px 8px;
+      }
+      .container {
+        width: 100%;
+        height: 100%;
+        flex-grow: 1;
+        padding: 0px 8px;
+        overflow-y: auto;
+      }
+      .handler {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      #map {
+        width: 100%;
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
+      figure > canvas {
+        max-width: 100%;
+      }
+    </style>
   </head>
   <body>
-    <div id="map"></div>
+    <div class="main">
+      <div class="sidebar">
+        <h1>CanvasMap in browser</h1>
+        <div class="handler">
+          <section>
+            <label for="width">Width:</label>
+            <input
+              type="number"
+              id="width"
+              name="width"
+              required
+              min="300"
+              max="1200"
+              value="600"
+            />
+          </section>
+          <section>
+            <label for="width">Height:</label>
+            <input
+              type="number"
+              id="height"
+              name="height"
+              required
+              min="300"
+              max="1200"
+              value="600"
+            />
+          </section>
+          <section>
+            <label for="lon">Longitude:</label>
+            <input
+              type="number"
+              id="lon"
+              name="lon"
+              required
+              min="122"
+              max="149"
+              value="140.4602"
+              step="0.0001"
+            />
+          </section>
+          <section>
+            <label for="lat">Latitude:</label>
+            <input
+              type="number"
+              id="lat"
+              name="lat"
+              required
+              min="20"
+              max="46"
+              value="36.3703"
+              step="0.0001"
+            />
+          </section>
+          <section>
+            <label for="zoom">Zoom:</label>
+            <input
+              type="number"
+              id="zoom"
+              name="zoom"
+              required
+              min="2"
+              max="16"
+              value="15.0"
+              step="0.1"
+            />
+          </section>
+          <section>
+            <label for="title">Title:</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              placeholder="Map title (optional)"
+            />
+          </section>
+          <section>
+            <button id="render">Render</button>
+          </section>
+        </div>
+      </div>
+      <div class="container">
+        <div id="map"></div>
+      </div>
+    </div>
     <script type="module" src="./src/index.ts"></script>
   </body>
 </html>
