@@ -42,7 +42,7 @@
   "scripts": {
     "dev": "npm-run-all dev:mjs dev:cjs --parallel",
     "dev:mjs": "tsc --watch -p ./tsconfig.mjs.json",
-    "dev:cjs": "tsc --watch -p .tsconfig.json",
+    "dev:cjs": "tsc --watch -p ./tsconfig.json",
     "clean": "git clean -fx lib/ module/",
     "tsc": "tsc -p ./tsconfig.json && tsc -p ./tsconfig.mjs.json",
     "build": "npm-run-all clean tsc",
