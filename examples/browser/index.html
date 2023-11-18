@@ -31,6 +31,11 @@
         flex-direction: column;
         gap: 8px;
       }
+      details {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
       #map {
         width: 100%;
         display: flex;
@@ -46,7 +51,8 @@
     <div class="main">
       <div class="sidebar">
         <h1>CanvasMap in browser</h1>
-        <div class="handler">
+        <fieldset class="handler">
+          <legend>Map config</legend>
           <section>
             <label for="width">Width:</label>
             <input
@@ -119,10 +125,13 @@
               placeholder="Map title (optional)"
             />
           </section>
+          <details>
+            <summary>Layers</summary>
+          </details>
           <section>
             <button id="render">Render</button>
           </section>
-        </div>
+        </fieldset>
       </div>
       <div class="container">
         <div id="map"></div>

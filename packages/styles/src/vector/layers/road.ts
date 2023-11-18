@@ -25,7 +25,7 @@ const road: VectorTileLayer = {
   layerName: "road",
   render:
     ({ context, theme }) =>
-    (feature: Feature) => {
+    (feature) => {
       context.strokeStyle = roadStrokeColor(feature, theme);
       context.lineWidth = roadLineWidth(feature);
       context.stroke();

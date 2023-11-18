@@ -10,6 +10,7 @@ import type {
   Position,
   FeatureCollection,
 } from "@turf/helpers";
+import type { VectorLayerNames } from "@cieloazul310/canvasmap-styles/lib/vector/layers";
 import {
   defineTheme,
   zoomToScale,
@@ -36,6 +37,7 @@ export type VectorMapOptions = {
     | Feature<Polygon | MultiPolygon>
     | FeatureCollection<Polygon | MultiPolygon>;
   attribution: string;
+  layers: VectorLayerNames[];
 };
 
 export type RasterMapOptions = {

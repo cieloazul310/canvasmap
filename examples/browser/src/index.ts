@@ -1,4 +1,5 @@
 import { CanvasMapBrowser } from "@cieloazul310/canvasmap";
+import { createLayersList, getLayerNames } from "./layers";
 
 function getSize() {
   const w = document.querySelector<HTMLInputElement>("#width");
@@ -34,6 +35,7 @@ async function onClick() {
   const { width, height } = getSize();
   const { lon, lat, zoom } = getView();
   const title = getTitle();
+  const layers = getLayerNames();
 
   const map = new CanvasMapBrowser(width, height, {
     center: [lon, lat],
@@ -41,7 +43,7 @@ async function onClick() {
     title,
   });
 
-  await map.renderVectorMap();
+  await map.renderVectorMap({ layers });
 
   const viewer = document.querySelector("#map");
   if (viewer) {
@@ -63,5 +65,6 @@ async function onClick() {
   }
 }
 
+createLayersList();
 const button = document.querySelector("#render");
 button?.addEventListener("click", onClick);

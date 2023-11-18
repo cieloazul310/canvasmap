@@ -32,6 +32,7 @@ class CanvasMapBrowser extends CanvasMapBase {
   public async renderVectorMap({
     background,
     backgroundFeature,
+    layers,
   }: Partial<VectorMapOptions> = {}) {
     const context = this.canvas.getContext("2d");
     const { width, height } = this.canvas;
@@ -45,6 +46,7 @@ class CanvasMapBrowser extends CanvasMapBase {
       theme: this.theme,
       backgroundColor: background,
       backgroundFeature,
+      layers,
     });
     return this;
   }
@@ -72,6 +74,7 @@ class CanvasMapBrowser extends CanvasMapBase {
     {
       background,
       backgroundFeature,
+      layers,
       tileUrl,
       rasterGrayScale,
     }: Partial<TileMapOptions> = {},
@@ -89,6 +92,7 @@ class CanvasMapBrowser extends CanvasMapBase {
         theme: this.theme,
         backgroundColor: background,
         backgroundFeature,
+        layers,
       });
     } else {
       await rasterTilesBrowser(context, {

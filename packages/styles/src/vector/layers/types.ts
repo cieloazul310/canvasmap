@@ -3,8 +3,17 @@ import type { CanvasRenderingContext2D as NodeCanvasRenderingContext2D } from "c
 import type { GeoProjection } from "d3-geo";
 import type { Theme, MapFontSizes } from "@cieloazul310/canvasmap-utils";
 
+export type VectorLayerNames =
+  | "building"
+  | "contour"
+  | "label"
+  | "railway"
+  | "road"
+  | "symbol"
+  | "waterarea";
+
 export type VectorTileLayer = {
-  layerName: string;
+  layerName: VectorLayerNames;
   render: ({
     context,
     theme,

@@ -18,7 +18,10 @@ import {
   railway,
   label,
   symbol,
+  type VectorLayerNames,
 } from "./layers";
+
+export { type VectorLayerNames } from "./layers";
 
 export type VectorTilesOptions = {
   backgroundColor?: string;
@@ -26,6 +29,7 @@ export type VectorTilesOptions = {
     | Feature<Polygon | MultiPolygon>
     | FeatureCollection<Polygon | MultiPolygon>
     | null;
+  layers?: VectorLayerNames[];
   width: number;
   height: number;
   projection: GeoProjection;
@@ -43,6 +47,7 @@ async function vectorTiles(
     theme,
     backgroundColor,
     backgroundFeature,
+    layers,
   }: VectorTilesOptions,
 ) {
   const url = `https://cyberjapandata.gsi.go.jp/xyz/experimental_bvmap/{z}/{x}/{y}.pbf`;
@@ -56,7 +61,9 @@ async function vectorTiles(
     building,
     label,
     symbol,
-  ];
+  ].filter(({ layerName }) =>
+    layers?.length ? layers.includes(layerName) : true,
+  );
 
   /**
    * Load features from specified layers.
@@ -86,7 +93,7 @@ async function vectorTiles(
   /**
    * Assort features and flatten features array
    */
-  const layers = layerNames.map((_, i) =>
+  const vectorLayers = layerNames.map((_, i) =>
     features
       .map((feature) => feature[i])
       .reduce((accum, curr) => [...accum, ...curr], []),
@@ -112,7 +119,7 @@ async function vectorTiles(
   /**
    * Render features
    */
-  layers.forEach((layerFeatures, i) => {
+  vectorLayers.forEach((layerFeatures, i) => {
     const render = layerNames[i].render({ context, theme, projection });
     layerFeatures.forEach((feature) => {
       context.beginPath();
