@@ -1,7 +1,7 @@
 import type { VectorLayerNames } from "@cieloazul310/canvasmap";
 
 const layerNames: VectorLayerNames[] = [
-  "buildings",
+  "building",
   "contour",
   "label",
   "railway",
