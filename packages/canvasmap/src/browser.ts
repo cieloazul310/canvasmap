@@ -1,14 +1,6 @@
-import * as fs from "fs";
-import * as path from "path";
-import {
-  createCanvas,
-  type Canvas as NodeCanvas,
-  type PngConfig,
-  type JpegConfig,
-} from "canvas";
 import { geoPath } from "d3-geo";
 import {
-  rasterTilesNode,
+  rasterTilesBrowser,
   vectorTiles,
   renderAttribution,
   renderTitle,
@@ -18,34 +10,23 @@ import CanvasMapBase, {
   type TileMapOptions,
   type VectorMapOptions,
   type RasterMapOptions,
-} from "./CanvasMapBase";
+} from "./base";
 
-export type CanvasMapOptions = CanvasMapBaseOptions;
+export type CanvasMapBrowserOptions = CanvasMapBaseOptions;
 
-class CanvasMap extends CanvasMapBase {
-  private canvas: NodeCanvas;
+class CanvasMapBrowser extends CanvasMapBase {
+  private canvas: HTMLCanvasElement;
 
   constructor(
     width: number,
     height: number,
-    options?: Partial<CanvasMapOptions>,
+    options?: Partial<CanvasMapBrowserOptions>,
   ) {
     super(width, height, options);
-    this.canvas = createCanvas(width, height);
-  }
 
-  public getCanvas() {
-    return this.canvas;
-  }
-
-  public getContext() {
-    const context = this.canvas.getContext("2d");
-    return context;
-  }
-
-  public getPath() {
-    const context = this.canvas.getContext("2d");
-    return geoPath(this.projection, context);
+    this.canvas = document.createElement("canvas");
+    this.canvas.width = width;
+    this.canvas.height = height;
   }
 
   public async renderVectorMap({
@@ -55,6 +36,8 @@ class CanvasMap extends CanvasMapBase {
   }: Partial<VectorMapOptions> = {}) {
     const context = this.canvas.getContext("2d");
     const { width, height } = this.canvas;
+    if (!context) return this;
+
     await vectorTiles(context, {
       width,
       height,
@@ -71,7 +54,9 @@ class CanvasMap extends CanvasMapBase {
   public async renderRasterMap({ tileUrl }: Partial<RasterMapOptions> = {}) {
     const context = this.canvas.getContext("2d");
     const { width, height } = this.canvas;
-    await rasterTilesNode(context, {
+    if (!context) return this;
+
+    await rasterTilesBrowser(context, {
       tiles: this.tiles,
       url: tileUrl,
       width,
@@ -91,10 +76,12 @@ class CanvasMap extends CanvasMapBase {
       backgroundFeature,
       layers,
       tileUrl,
+      rasterGrayScale,
     }: Partial<TileMapOptions> = {},
-  ): Promise<CanvasMap> {
+  ) {
     const context = this.canvas.getContext("2d");
     const { width, height } = this.canvas;
+    if (!context) return this;
 
     if (type === "vector") {
       await vectorTiles(context, {
@@ -108,14 +95,22 @@ class CanvasMap extends CanvasMapBase {
         layers,
       });
     } else {
-      await rasterTilesNode(context, { tiles: this.tiles, url: tileUrl });
+      await rasterTilesBrowser(context, {
+        tiles: this.tiles,
+        url: tileUrl,
+        grayScale: rasterGrayScale,
+        width: this.width,
+        height: this.height,
+      });
     }
     return this;
   }
 
-  private renderText(): CanvasMap {
-    const { width, height } = this.canvas;
+  public renderText(): CanvasMapBrowser {
+    const { width, height } = this;
     const context = this.canvas.getContext("2d");
+    if (!context || this.state.textRendered) return this;
+
     if (this.title) {
       renderTitle(context, { width, title: this.title, theme: this.theme });
     }
@@ -131,35 +126,21 @@ class CanvasMap extends CanvasMapBase {
     return this;
   }
 
-  public exportPng(file: string, config?: PngConfig): CanvasMap {
-    if (!this.state.textRendered) this.renderText();
-    const { canvas } = this;
-    const buffer = canvas.toBuffer("image/png", config);
-    const dir = path.dirname(file);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
+  public getCanvas() {
+    this.renderText();
 
-    fs.writeFileSync(file, buffer);
-    console.log(`${file} exported!`);
-
-    return this;
+    return this.canvas;
   }
 
-  public exportJpg(file: string, config?: JpegConfig): CanvasMap {
-    this.renderText();
-    const { canvas } = this;
-    const buffer = canvas.toBuffer("image/jpeg", config);
-    const dir = path.dirname(file);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
+  public getContext() {
+    const context = this.canvas.getContext("2d");
+    return context;
+  }
 
-    fs.writeFileSync(file, buffer);
-    console.log(`${file} exported!`);
-
-    return this;
+  public getPath() {
+    const context = this.canvas.getContext("2d");
+    return geoPath(this.projection, context);
   }
 }
 
-export default CanvasMap;
+export default CanvasMapBrowser;
