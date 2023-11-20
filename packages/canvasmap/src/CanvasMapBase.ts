@@ -10,7 +10,7 @@ import type {
   Position,
   FeatureCollection,
 } from "@turf/helpers";
-import type { VectorLayerNames } from "@cieloazul310/canvasmap-styles/lib/vector/layers";
+import type { VectorLayerNames } from "@cieloazul310/canvasmap-styles";
 import {
   defineTheme,
   zoomToScale,
