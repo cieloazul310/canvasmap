@@ -1,12 +1,14 @@
-export interface MapFontSize {
+export type MapFontSizes = {
   default: number;
   small: number;
   large: number;
   attribution: number;
-}
-export type MapFontSizes = keyof MapFontSize;
+};
 
-export function mapFontSize(width: number, height: number): MapFontSize {
+export function defineMapFontSizes(
+  width: number,
+  height: number,
+): MapFontSizes {
   return {
     default: Math.round(width * 0.0075),
     small: Math.round(width * 0.006),

@@ -9,7 +9,10 @@
     "packages/*"
   ],
   "scripts": {
-    "build:package": "npm run build --workspace=@cieloazul310/canvasmap",
+    "turbo": "turbo",
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "build:package": "turbo run build --filter='./packages/*'",
     "test:examples": "npm run generate --workspace=node-example --workspace=ts-node-example",
     "changeset": "changeset",
     "publish-packages": "npm run build:package && changeset version && changeset publish",
@@ -27,10 +30,11 @@
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
+    "turbo": "^1.10.16",
     "typescript": "^5.2.2"
   },
   "lint-staged": {
-    "{examples,packages}/*/**/src/*/**/*.{cjs,mjs,js,ts}": [
+    "{examples,packages}/*/**/*.{cjs,mjs,js,ts}": [
       "eslint --fix",
       "prettier --parser typescript --write"
     ]

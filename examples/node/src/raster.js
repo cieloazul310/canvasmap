@@ -8,7 +8,7 @@ const map = new CanvasMap(width, height, {
   title: "Raster Tiles",
 });
 map
-  .renderBasemap("raster")
+  .renderRasterMap()
   .then((canvas) => {
     canvas.exportPng("./dist/raster.png");
   })

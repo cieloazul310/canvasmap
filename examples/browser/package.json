@@ -1,0 +1,24 @@
+{
+  "name": "browser",
+  "type": "module",
+  "private": true,
+  "version": "0.0.4",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@cieloazul310/canvasmap": "^0.0.4"
+  },
+  "devDependencies": {
+    "@cieloazul310/eslint-config-custom": "^0.0.4",
+    "@cieloazul310/tsconfig": "^0.0.4",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.0"
+  }
+}

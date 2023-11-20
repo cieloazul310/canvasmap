@@ -7,11 +7,12 @@ const geojson = JSON.parse(
 );
 const width = 800;
 const height = 800;
-const map = new CanvasMap(width, height, geojson, {
+const map = new CanvasMap(width, height, {
   title: "With GeoJSON",
 });
 map
-  .renderBasemap("vector")
+  .setProjectionFitExtent(geojson)
+  .renderVectorMap()
   .then((canvas) => {
     const context = canvas.getContext();
     const geoPath = canvas.getPath();
