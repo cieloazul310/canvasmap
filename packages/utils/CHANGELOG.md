@@ -1,4 +1,4 @@
-# @cieloazul310/tsconfig
+# @cieloazul310/canvasmap-utils
 
 ## 0.1.0
 
@@ -9,9 +9,3 @@
   ```ts
   import { CanvasMapBrowser } from "@cieloazul310/canvasmap";
   ```
-
-## 0.0.4
-
-### Patch Changes
-
-- f3a65a8: add esm support
