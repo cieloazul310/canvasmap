@@ -44,7 +44,7 @@
     "dev:mjs": "tsc --watch -p ./tsconfig.mjs.json",
     "dev:cjs": "tsc --watch -p ./tsconfig.json",
     "clean": "git clean -fx lib/ module/",
-    "tsc": "tsc -p ./tsconfig.json --verbose && tsc -p ./tsconfig.mjs.json",
+    "tsc": "tsc -p ./tsconfig.json && tsc -p ./tsconfig.mjs.json",
     "build": "npm-run-all clean tsc",
     "check-types": "tsc --noEmit",
     "eslint": "eslint src/**/*.ts --fix",
