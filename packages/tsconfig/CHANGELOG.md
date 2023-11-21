@@ -1,5 +1,11 @@
 # @cieloazul310/tsconfig
 
+## 0.2.0
+
+### Minor Changes
+
+- 9408730: Only version bump
+
 ## 0.1.0
 
 ### Minor Changes
