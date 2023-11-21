@@ -4,110 +4,227 @@ Canvas マップ -データビジュアライゼーションのための
 
 [![npm version](https://badge.fury.io/js/%40cieloazul310%2Fcanvasmap.svg)](https://badge.fury.io/js/%40cieloazul310%2Fcanvasmap)
 
-## How to Use
-
-```js
-const { CanvasMap } = require('@cieloazul310/canvasmap');
-
-const width = 1000;
-const height = 1000;
-const map = new CanvasMap(width, height);
-map.renderBasemap('vector')
-  .then((map) => {
-    map.exportPng('map.png');
-  });
-```
-
 ## Installing
 
 ```sh
 npm install @cieloazul310/canvasmap
 ```
 
+## How to Use
+
+### Node (Vector map)
+
+```js
+const { CanvasMap } = require("@cieloazul310/canvasmap");
+
+const width = 1000;
+const height = 1000;
+const map = new CanvasMap(width, height, {
+  center: [140.4602, 36.3703],
+  zoom: 13,
+});
+map
+  .renderVectorMap()
+  .then((canvas) => {
+    canvas.exportPng("./dist/basic.png");
+  })
+  .catch((err) => console.error(err));
+```
+
+### Node (Raster map)
+
+```js
+const { CanvasMap } = require("@cieloazul310/canvasmap");
+
+const width = 1000;
+const height = 1000;
+const map = new CanvasMap(width, height, {
+  center: [140.4602, 36.3703],
+  zoom: 13,
+});
+map
+  .renderRasterMap({
+    tileUrl: "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg",
+  })
+  .then((canvas) => {
+    canvas.exportPng("./dist/basic.png");
+  })
+  .catch((err) => console.error(err));
+```
+
+### Browser
+
+```ts
+import { CanvasMapBrowser } from "@cieloazul310/canvasmap";
+
+const width = 1000;
+const height = 1000;
+const map = new CanvasMapBrowser(width, height, {
+  center: [140.4602, 36.3703],
+  zoom: 13,
+});
+
+async function onClick() {
+  await map.renderVectorMap();
+  const canvas = map.getCanvas();
+  const contaienr = document.querySelector("#map");
+  container?.appendChild(container);
+}
+
+const button = document.querySelector("#rbutton");
+button?.addEventListener("click", onClick);
+```
+
 ## API Reference
 
-### class CanvasMap
+### `CanvasMap` (class)
 
-```typescript
-const map = new CanvasMap(width, height, feature, options);
-// or
+```ts
 const map = new CanvasMap(width, height, options);
 ```
 
-#### constructor
+#### Constructor
 
-##### width (required): `number`
+- width (*required*) `number`: 生成する地図の横幅
+- height (*required*) `number`: 生成する地図の縦幅
+- options (*optional*): `Partial<object>`
 
-生成する地図の横幅
+| name | type |   |
+|------|------|---|
+| title | `string` | Map title |
+| center | `[number, number]` | The center of map view |
+| zoom   | `number` | Zoom level of map view |
+| theme | `Partial<Theme>` | Map theme including padding, palette and fontSizes |
 
-##### height (required): `number`
+#### Common Methods
 
-生成する地図の縦幅
+##### setCenter
 
-##### feature (*optional*): `GeoJSON` | `GeoJSON Feature`
+- *arguments*: `[number, number]`
+- *returns*: `this`
 
-地図の表示領域を地物、または GeoJSON オブジェクトで設定する
+##### setZoom
 
-##### options (*optional*): object
+- *arguments*: `number`
+- *returns*: `this`
 
-- title?: `string`
-- padding?: `Partial<{ top: number; right: number; bottom: number; left: number }`
-- center?: `Position ([x, y])`
-- zoom?: `number`
+##### setProjectionFitExtent
 
-#### methods
+- *arguments*: `Feature | FeatureCollection`
+- *returns*: `this`
 
-##### getSize()
+##### setTitle
 
-*return*: `object { width: number; height: number }`
+- *arguments*: `string`
+- *returns*: `this`
 
-##### getPadding()
+##### addAttribution
 
-*return*: `object { top: number; right: number; bottom: number; left: number }`
+- *arguments*: `string`
+- *returns*: `this`
 
-##### getCanvas()
+##### setTheme
 
-*return*: `Canvas` ([node-canvas])
+- *arguments*: `Partial<{ padding: Partial<Padding>; palette: Partial<Palette> }>`
+- *returns*: `this`
 
-##### getContext()
+##### getSize
 
-*return*: `CanvasRenderingContext2D` ([node-canvas])
+- *returns*: `object { width: number; height: number }`
 
-##### getProjection()
+##### getProjection
 
-*return*: `GeoProjection` ([d3-geo])
+- *returns*: `Projection` ([d3-geo])
 
-##### getPath()
+##### getTiles
 
-*return*: `GeoPath` ([d3-geo])
+- *returns*: `Tiles` ([d3-tile])
 
-##### await renderBasemap(type: `'raster' | 'vector'`, options?)
+#### `CanvasMap` Methods (node)
 
-*return*: `Promise<this>` (Promise object of CanvasMap class)
+##### getCanvas
 
-options:
+- *returns*: `Canvas` ([node-canvas])
 
-- tileUrl: `string`;
-- rasterGrayScale: `boolean`;
-- background: `string`;
-- backgroundFeature: `Feature<Polygon | MultiPolygon> | FeatureCollection<Polygon | MultiPolygon>` ;
-- attribution: `string`;
+##### getContext
 
-##### exportPng(fileName: `string`)
+- *returns*: `CanvasRenderingContext2D` ([node-canvas])
 
-*return*: `this` (CanvasMap class)
+##### getPath
 
-##### exportJpg(fileName: `string`)
+- *returns*: `GeoPath` ([d3-geo])
 
-*return*: `this` (CanvasMap class)
+##### await renderVectorMap
 
-##### addAttribution(attribution: `string`)
+- *arguments*: Options (*optional*)
+- *returns*: `Promise<this>`
 
-*return*: `this` (CanvasMap class)
+| name | types | |
+|------|-------|-|
+| background | `string` | Background color |
+| backgroundFeature | `Feature \| FeatureCollection` | Emphasized feature as background. |
+| layers | `VectorLayerNames[]` | VectorLayerNames to render. |
 
-##### getCanvasMapOptions()
+`VectorLayerNames`: `"building" | "contour" | "label" | "railway" | "road" | "symbol" | "waterarea"`
 
-*return*: `object CanvasMapOptions`
+##### *await* renderRasterMap
+
+- *arguments*: Options(*optional*)
+- *returns*: `Promise<this>`
+
+| name | types | |
+|------|-------|-|
+| tileUrl | `string` | Raster tile url (default to `https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png` ) |
+
+##### exportPng
+
+- *arguments*:
+  - fileName: `string`
+  - options: `PngConfig` ([node-canvas])
+- *returns*: `this` (CanvasMap class)
+
+##### exportJpg
+
+- *arguments*:
+  - filename: `string`
+  - options: `JpegConfig` ([node-canvas])
+- *returns*: `this` (CanvasMap class)
+
+#### `CanvasMapBrowser` Methods (browser)
+
+##### getCanvas
+
+- *returns*: `HTMLCanvasElement`
+
+##### getContext
+
+- *returns*: `CanvasRenderingContext2D` 
+
+##### getPath
+
+- *returns*: `GeoPath` ([d3-geo])
+
+##### await renderVectorMap
+
+- *arguments*: Options (*optional*)
+- *returns*: `Promise<this>`
+
+| name | types | |
+|------|-------|-|
+| background | `string` | Background color |
+| backgroundFeature | `Feature \| FeatureCollection` | Emphasized feature as background. |
+| layers | `VectorLayerNames[]` | VectorLayerNames to render. |
+
+`VectorLayerNames`: `"building" | "contour" | "label" | "railway" | "road" | "symbol" | "waterarea"`
+
+##### *await* renderRasterMap
+
+- *arguments*: Options(*optional*)
+- *returns*: `Promise<this>`
+
+| name | types | |
+|------|-------|-|
+| tileUrl | `string` | Raster tile url (default to `https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png` ) |
 
 ## Recipes
 
@@ -117,7 +234,7 @@ options:
 const width = 1000;
 const height = 1000;
 const map = new CanvasMap(width, height);
-map.renderBasemap('vector')
+map.renderVectorMap()
   .then((map) => {
     map.exportPng('map.png');
   });
@@ -130,7 +247,7 @@ map.renderBasemap('vector')
   const width = 1000;
   const height = 1000;
   const map = new CanvasMap(width, height);
-  await map.renderBasemap('vector');
+  await map.renderVectorMap();
   map.exportPng('map.png');
 })();
 ```
@@ -142,7 +259,7 @@ const geojson = JSON.parse(fs.readFileSync('gj.geojson', 'utf8'));
 const width = 1000;
 const height = 1000;
 const map = new CanvasMap(width, height, geojson);
-await map.renderBasemap('vector');
+await map.renderVectorMap();
 const context = map.getContext();
 const path = map.getPath();
 // draw features
@@ -155,12 +272,14 @@ geojson.features.forEach((feature) => {
 map.exportPng('map.png');
 ```
 
-Browse [example codes](./examples) and [gallery](./dist)
+Browse [example codes](./examples)
 
 ## References
 
 - [node-canvas]
 - [d3-geo]
+- [d3-tile]
 
 [node-canvas]: https://github.com/Automattic/node-canvas
 [d3-geo]: https://github.com/d3/d3-geo
+[d3-tile]: https://github.com/d3/d3-tile
