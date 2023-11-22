@@ -12,4 +12,5 @@ export type RasterTilesOptions = {
   projection?: GeoProjection;
   tiles: Tiles;
   theme?: Theme;
+  resolution?: number;
 };

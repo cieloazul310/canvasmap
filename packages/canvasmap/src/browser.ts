@@ -58,6 +58,7 @@ class CanvasMapBrowser extends CanvasMapBase {
 
     await rasterTilesBrowser(context, {
       tiles: this.tiles,
+      resolution: this.resolution,
       url: tileUrl,
       width,
       height,
