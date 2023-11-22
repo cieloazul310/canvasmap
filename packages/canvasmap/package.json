@@ -1,7 +1,7 @@
 {
   "name": "@cieloazul310/canvasmap",
   "description": "Generate plain map for data visualization.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "lib/index.js",
   "module": "module/index.js",
   "types": "lib/index.d.ts",
@@ -51,8 +51,8 @@
     "lint": "npm-run-all eslint check-types"
   },
   "dependencies": {
-    "@cieloazul310/canvasmap-styles": "^0.2.0",
-    "@cieloazul310/canvasmap-utils": "^0.2.0",
+    "@cieloazul310/canvasmap-styles": "^0.2.1",
+    "@cieloazul310/canvasmap-utils": "^0.2.1",
     "@turf/bbox": "^6.5.0",
     "@turf/bbox-polygon": "^6.5.0",
     "@turf/helpers": "^6.5.0",
@@ -62,8 +62,8 @@
     "d3-tile": "^1.0.0"
   },
   "devDependencies": {
-    "@cieloazul310/eslint-config-custom": "^0.2.0",
-    "@cieloazul310/tsconfig": "^0.2.0",
+    "@cieloazul310/eslint-config-custom": "^0.2.1",
+    "@cieloazul310/tsconfig": "^0.2.1",
     "@types/d3-geo": "^2.0.1",
     "typescript": "^5.2.2"
   }

@@ -1,5 +1,11 @@
 # @cieloazul310/tsconfig
 
+## 0.2.1
+
+### Patch Changes
+
+- d87dce4: add resolution
+
 ## 0.2.0
 
 ### Minor Changes

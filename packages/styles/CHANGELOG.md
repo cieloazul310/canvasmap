@@ -1,5 +1,13 @@
 # @cieloazul310/canvasmap-styles
 
+## 0.2.1
+
+### Patch Changes
+
+- d87dce4: add resolution
+- Updated dependencies [d87dce4]
+  - @cieloazul310/canvasmap-utils@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes
