@@ -35,6 +35,7 @@ export function createPaletteConfig() {
 
   paletteNames.forEach((paletteName) => {
     const container = document.createElement("div");
+    container.className = "palette";
     const storaged = localStorage.getItem(`canvasmap-palette-${paletteName}`);
 
     const input = document.createElement("input");

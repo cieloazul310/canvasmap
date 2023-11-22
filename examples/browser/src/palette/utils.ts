@@ -30,11 +30,17 @@ export function createNestedPalette<T extends "background" | "road" | "label">(
 ) {
   return (target: Element) => {
     const section = document.createElement("div");
+    section.className = "palette-section";
+    const sectionTitle = document.createElement("small");
+    sectionTitle.innerText = variant;
+    section.append(sectionTitle);
+
     const keys = nestedKeys(variant);
     const defaultNestedPalette = defaultPalette[variant];
 
     keys.forEach((key) => {
       const container = document.createElement("div");
+      container.className = "palette";
       const paletteName = `${variant}-${key}`;
       const storaged = localStorage.getItem(`canvasmap-palette-${paletteName}`);
 
@@ -55,7 +61,7 @@ export function createNestedPalette<T extends "background" | "road" | "label">(
 
       const label = document.createElement("label");
       label.setAttribute("for", `palette-${paletteName}`);
-      label.innerText = paletteName;
+      label.innerText = key;
 
       container.appendChild(input);
       container.appendChild(label);
