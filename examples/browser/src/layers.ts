@@ -10,17 +10,32 @@ const layerNames: VectorLayerNames[] = [
   "waterarea",
 ];
 
+const onChange = (id: string) => (event: Event) => {
+  const { checked } = event.target as HTMLInputElement;
+  localStorage.setItem(`canvasmap-layer-${id}`, String(checked));
+};
+
 export function createLayersList() {
-  const details = document.querySelector("details");
+  const details = document.querySelector("#layers");
   if (!details) return;
 
   layerNames.forEach((layerName) => {
     const container = document.createElement("div");
+    const storaged = localStorage.getItem(`canvasmap-layer-${layerName}`);
+
     const input = document.createElement("input");
     input.setAttribute("type", "checkbox");
-    input.checked = true;
+
+    if (storaged) {
+      input.checked = Boolean(JSON.parse(storaged));
+    } else {
+      input.checked = true;
+    }
     input.setAttribute("id", layerName);
     input.setAttribute("name", layerName);
+
+    input.addEventListener("change", onChange(layerName));
+
     const label = document.createElement("label");
     label.setAttribute("for", layerName);
     label.innerText = layerName;
@@ -38,5 +53,15 @@ export function getLayerNames() {
     if (!el) return true;
 
     return el.checked;
+  });
+}
+
+export function resetLayers() {
+  layerNames.forEach((layerName) => {
+    const el = document.querySelector<HTMLInputElement>(`#${layerName}`);
+
+    if (!el) return;
+    el.checked = true;
+    localStorage.removeItem(`canvasmap-layer-${layerName}`);
   });
 }
