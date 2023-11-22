@@ -73,6 +73,7 @@ class CanvasMap extends CanvasMapBase {
     const { width, height } = this.canvas;
     await rasterTilesNode(context, {
       tiles: this.tiles,
+      resolution: this.resolution,
       url: tileUrl,
       width,
       height,

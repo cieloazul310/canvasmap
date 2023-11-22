@@ -95,6 +95,7 @@ const map = new CanvasMap(width, height, options);
 | center | `[number, number]` | The center of map view |
 | zoom   | `number` | Zoom level of map view |
 | theme | `Partial<Theme>` | Map theme including padding, palette and fontSizes |
+| resolution | `number` |  (if the `zoom` is *12* and the `resolution` is *2*, the tile zoom level will be **13** ; default to 1) |
 
 #### Common Methods
 

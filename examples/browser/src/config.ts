@@ -48,6 +48,16 @@ const fields = [
     defaultValue: 15,
   },
   {
+    id: "resolution",
+    name: "Resolution",
+    type: "number",
+    required: true,
+    min: 0.25,
+    max: 4,
+    step: 0.25,
+    defaultValue: 1,
+  },
+  {
     id: "title",
     name: "Title",
     type: "text",
@@ -131,6 +141,13 @@ export function getView() {
   };
 }
 
+export function getResolution() {
+  const r = document.querySelector<HTMLInputElement>("#resolution");
+  if (!r) return 1;
+
+  return parseFloat(r?.value);
+}
+
 export function getTitle() {
   const t = document.querySelector<HTMLInputElement>("#title");
 
@@ -140,9 +157,10 @@ export function getTitle() {
 export function getConfig() {
   const { width, height } = getSize();
   const { lon, lat, zoom } = getView();
+  const resolution = getResolution();
   const title = getTitle();
 
-  return { width, height, lon, lat, zoom, title };
+  return { width, height, lon, lat, zoom, title, resolution };
 }
 
 export function resetConfig() {

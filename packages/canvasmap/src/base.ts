@@ -29,6 +29,7 @@ export type CanvasMapBaseOptions = {
   zoom: number;
   title: string;
   theme: Omit<DefineThemeOptions, "width" | "height">;
+  resolution: number;
 };
 
 export type VectorMapOptions = {
@@ -61,6 +62,8 @@ class CanvasMapBase {
 
   public title: string | undefined;
 
+  public resolution: number;
+
   public attribution: string[] = [];
 
   public state: { textRendered: boolean } = { textRendered: false };
@@ -79,17 +82,24 @@ class CanvasMapBase {
     this.projection = geoMercator();
     this.setCenter(options?.center).setZoom(options?.zoom);
 
+    this.resolution = Math.max(0.25, Math.min(options?.resolution ?? 1, 4));
+
     this.tiles = this.updateTiles();
 
     this.setTitle(options?.title);
   }
 
   private updateTiles() {
-    const { width, height } = this;
+    const { width, height, resolution } = this;
     const tile = d3tile()
-      .size([width, height])
-      .scale(this.projection.scale() * Math.PI * 2)
-      .translate(this.projection([0, 0]) ?? [0, 0]);
+      .size([width * resolution, height * resolution])
+      .scale(this.projection.scale() * Math.PI * 2 * resolution)
+      .translate(
+        (this.projection([0, 0])?.map((value) => value * resolution) as [
+          number,
+          number,
+        ]) ?? [0, 0],
+      );
     return tile();
   }
 

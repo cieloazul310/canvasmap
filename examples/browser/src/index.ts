@@ -4,7 +4,7 @@ import { createLayersList, getLayerNames, resetLayers } from "./layers";
 import { createPaletteConfig, getPalette, resetPalette } from "./palette";
 
 async function onClick() {
-  const { width, height, lon, lat, zoom, title } = getConfig();
+  const { width, height, lon, lat, zoom, title, resolution } = getConfig();
   const layers = getLayerNames();
   const palette = getPalette();
 
@@ -12,6 +12,7 @@ async function onClick() {
     center: [lon, lat],
     zoom,
     title,
+    resolution,
     theme: {
       palette,
     },
@@ -28,6 +29,7 @@ async function onClick() {
         <li>size: ${width}x${height}</li>
         <li>center: ${lon}, ${lat}</li>
         <li>zoom: ${zoom}</li>
+        <li>resolution: ${resolution}</li>
       </ul>
     `;
 
