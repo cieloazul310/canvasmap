@@ -4,9 +4,9 @@ on:
     types: [opened, synchronize]
     paths:
       - package.json
-      - examples/*/**/src/**
-      - packages/*/**/src/**
-      - packages/*/**/package.json
+      - 'examples/*/**/src/**'
+      - 'packages/*/**/src/**'
+      - 'packages/*/**/package.json'
       - .github/workflows/test.yml
 
 env:
