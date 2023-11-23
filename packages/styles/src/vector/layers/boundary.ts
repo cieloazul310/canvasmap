@@ -19,6 +19,7 @@ const boundary: VectorTileLayer = {
       context.strokeStyle = theme.palette.boundary.pref;
       context.setLineDash([5, 5]);
       context.stroke();
+      context.setLineDash([]);
     },
 };
 
