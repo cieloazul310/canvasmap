@@ -1,18 +1,20 @@
-import type { Feature } from "@turf/helpers";
 import type { VectorTileLayer } from "./types";
 
-function contourWidth({ properties }: Feature): number {
-  if (!properties || !("alti" in properties)) return 0;
-  const { alti } = properties;
+type ContourProperties = {
+  alti: number;
+};
+
+function contourWidth({ alti }: ContourProperties): number {
   return (alti as number) % 50 === 0 ? 1 : 0.5;
 }
 
-const contour: VectorTileLayer = {
+const contour: VectorTileLayer<ContourProperties> = {
   layerName: "contour",
   render:
     ({ context, theme }) =>
-    (feature) => {
-      context.lineWidth = contourWidth(feature);
+    ({ properties }) => {
+      const { alti } = properties;
+      context.lineWidth = contourWidth({ alti });
       context.strokeStyle = theme.palette.contour;
       context.stroke();
     },

@@ -3,6 +3,10 @@ export type Palette = {
     main: string;
     contrast: string;
   };
+  boundary: {
+    pref: string;
+    town: string;
+  };
   waterarea: string;
   railway: string;
   road: {
@@ -24,6 +28,10 @@ export const defaultPalette: Palette = {
   background: {
     main: "#fff",
     contrast: "#eee",
+  },
+  boundary: {
+    pref: "#99c",
+    town: "#99c",
   },
   waterarea: "#ccd",
   railway: "#999",

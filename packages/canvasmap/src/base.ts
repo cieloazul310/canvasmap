@@ -89,7 +89,7 @@ class CanvasMapBase {
     this.setTitle(options?.title);
   }
 
-  private updateTiles() {
+  public updateTiles() {
     const { width, height, resolution } = this;
     const tile = d3tile()
       .size([width * resolution, height * resolution])
@@ -117,6 +117,14 @@ class CanvasMapBase {
   public setZoom(zoom?: number) {
     if (zoom) {
       this.projection.scale(zoomToScale(zoom));
+    }
+    this.tiles = this.updateTiles();
+    return this;
+  }
+
+  public setResolution(resolution?: number) {
+    if (resolution) {
+      this.resolution = resolution;
     }
     this.tiles = this.updateTiles();
     return this;

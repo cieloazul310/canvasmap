@@ -1,9 +1,14 @@
-import type { Feature } from "@turf/helpers";
+import type { Feature, Geometry, GeometryCollection } from "@turf/helpers";
 import type { CanvasRenderingContext2D as NodeCanvasRenderingContext2D } from "canvas";
 import type { GeoProjection } from "d3-geo";
 import type { Theme, MapFontSizes } from "@cieloazul310/canvasmap-utils";
 
+export type VectorTileFeatureProperties<P = Record<string, unknown>> = {
+  ftCode: number;
+} & P;
+
 export type VectorLayerNames =
+  | "boundary"
   | "building"
   | "contour"
   | "label"
@@ -12,7 +17,7 @@ export type VectorLayerNames =
   | "symbol"
   | "waterarea";
 
-export type VectorTileLayer = {
+export type VectorTileLayer<P = Record<string, unknown>> = {
   layerName: VectorLayerNames;
   render: ({
     context,
@@ -22,8 +27,38 @@ export type VectorTileLayer = {
     context: CanvasRenderingContext2D | NodeCanvasRenderingContext2D;
     theme: Theme;
     projection: GeoProjection;
-  }) => (feature: Feature) => void;
+  }) => (
+    feature: Feature<
+      Geometry | GeometryCollection,
+      VectorTileFeatureProperties<P>
+    >,
+  ) => void;
+  sort?: (
+    a: Feature<Geometry | GeometryCollection, VectorTileFeatureProperties<P>>,
+    b: Feature<Geometry | GeometryCollection, VectorTileFeatureProperties<P>>,
+  ) => number;
 };
+
+export type DspPos =
+  | "LT"
+  | "CT"
+  | "RT"
+  | "LC"
+  | "CC"
+  | "RC"
+  | "LB"
+  | "CB"
+  | "RB";
+export type Align = "L" | "C" | "R";
+export type Baseline = "T" | "C" | "B";
+
+function getAlignBaseline(dspPos: DspPos) {
+  if (!dspPos) return { align: "C" as Align, baseline: "C" as Baseline };
+  const align = dspPos.slice(0, 1) as Align;
+  const baseline = dspPos.slice(1, 2) as Baseline;
+
+  return { align, baseline };
+}
 
 export function getLabelSize(annoCtg: number): keyof MapFontSizes {
   return annoCtg === 210 ? "small" : "default";
@@ -37,25 +72,23 @@ export function labelColor(annoCtg: number, { palette }: Theme): string {
   return palette.label.base;
 }
 
-function dspPosToAlign(align: string) {
+function dspPosToAlign(align: Align) {
   if (align === "L") return "left";
   if (align === "R") return "right";
   return "center";
 }
 
-function dspPosToBaseline(baseline: string) {
+function dspPosToBaseline(baseline: Baseline) {
   if (baseline === "T") return "top";
   if (baseline === "B") return "bottom";
   return "middle";
 }
 
 export function textPos({
-  properties,
-}: Feature): [CanvasTextAlign, CanvasTextBaseline] {
-  if (!properties || !("dspPos" in properties)) return ["center", "middle"];
-  const { dspPos } = properties;
-  const align = (dspPos as string).slice(0, 1);
-  const baseline = (dspPos as string).slice(1, 2);
-
+  dspPos,
+}: {
+  dspPos: DspPos;
+}): [CanvasTextAlign, CanvasTextBaseline] {
+  const { align, baseline } = getAlignBaseline(dspPos);
   return [dspPosToAlign(align), dspPosToBaseline(baseline)];
 }

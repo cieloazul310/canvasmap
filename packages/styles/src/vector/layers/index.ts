@@ -1,3 +1,4 @@
+export { default as boundary } from "./boundary";
 export { default as building } from "./building";
 export { default as contour } from "./contour";
 export { default as label } from "./label";

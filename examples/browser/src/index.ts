@@ -3,24 +3,35 @@ import { getConfig, createConfig, resetConfig } from "./config";
 import { createLayersList, getLayerNames, resetLayers } from "./layers";
 import { createPaletteConfig, getPalette, resetPalette } from "./palette";
 
-async function onClick() {
+const map = new CanvasMapBrowser(600, 600);
+
+async function render() {
+  const loader = document.querySelector("#loader");
+  if (loader) {
+    loader.classList.add("show");
+  }
+
   const { width, height, lon, lat, zoom, title, resolution } = getConfig();
   const layers = getLayerNames();
   const palette = getPalette();
 
-  const map = new CanvasMapBrowser(width, height, {
-    center: [lon, lat],
-    zoom,
-    title,
-    resolution,
-    theme: {
-      palette,
-    },
-  });
+  map.setTitle(title);
+  map.setSize({ width, height });
+  map.setCenter([lon, lat]);
+  map.setZoom(zoom);
+  map.setTheme({ palette });
+  map.setResolution(resolution);
 
-  await map.renderVectorMap({ layers });
+  map.clearContext();
+  await map.renderVectorMap({ layers }).then(() => {
+    if (loader) {
+      loader.classList.remove("show");
+    }
+  });
+  map.renderText();
 
   const viewer = document.querySelector("#map");
+  const currentFigure = document.querySelector("#map figure");
   if (viewer) {
     const container = document.createElement("figure");
     const caption = document.createElement("figcaption");
@@ -37,6 +48,9 @@ async function onClick() {
     container.appendChild(canvas);
     container.appendChild(caption);
 
+    if (currentFigure) {
+      viewer.removeChild(currentFigure);
+    }
     viewer.appendChild(container);
   }
 }
@@ -51,8 +65,10 @@ createConfig();
 createLayersList();
 createPaletteConfig();
 
+window.addEventListener("load", render);
+
 const button = document.querySelector("#render");
-button?.addEventListener("click", onClick);
+button?.addEventListener("click", render);
 
 const resetButton = document.querySelector("#reset");
 resetButton?.addEventListener("click", reset);
