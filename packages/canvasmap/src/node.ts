@@ -34,6 +34,22 @@ class CanvasMap extends CanvasMapBase {
     this.canvas = createCanvas(width, height);
   }
 
+  public setSize({
+    width,
+    height,
+  }: Partial<{ width: number; height: number }>) {
+    if (width) {
+      this.width = width;
+      this.canvas.width = width;
+    }
+    if (height) {
+      this.height = height;
+      this.canvas.height = height;
+    }
+    this.tiles = this.updateTiles();
+    return this;
+  }
+
   public getCanvas() {
     return this.canvas;
   }
@@ -130,6 +146,13 @@ class CanvasMap extends CanvasMapBase {
     }
     this.state.textRendered = true;
     return this;
+  }
+
+  public clearContext() {
+    const { width, height } = this;
+    const context = this.canvas.getContext("2d");
+
+    context?.clearRect(0, 0, width, height);
   }
 
   public exportPng(file: string, config?: PngConfig): CanvasMap {

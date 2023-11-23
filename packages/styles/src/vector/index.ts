@@ -8,6 +8,8 @@ import type {
   FeatureCollection,
   Polygon,
   MultiPolygon,
+  Geometry,
+  GeometryCollection,
 } from "@turf/helpers";
 import { tileUrl, type Theme } from "@cieloazul310/canvasmap-utils";
 import {
@@ -18,7 +20,9 @@ import {
   railway,
   label,
   symbol,
+  boundary,
   type VectorLayerNames,
+  type VectorTileFeatureProperties,
 } from "./layers";
 
 export { type VectorLayerNames } from "./layers";
@@ -57,8 +61,9 @@ async function vectorTiles(
     waterarea,
     contour,
     road,
-    railway,
     building,
+    railway,
+    boundary,
     label,
     symbol,
   ].filter(({ layerName }) =>
@@ -77,14 +82,17 @@ async function vectorTiles(
           const vt = new VectorTile(pbf);
           return layerNames.map((layerName) => {
             const layer = vt.layers[layerName.layerName];
-            const layerFeatures: Feature[] = [];
+            const layerFeatures: Feature<
+              Geometry | GeometryCollection,
+              VectorTileFeatureProperties<any>
+            >[] = [];
             if (layer) {
               for (let i = 0; i < layer.length; i += 1) {
                 const feature = layer.feature(i);
                 layerFeatures.push(feature.toGeoJSON(x, y, z));
               }
             }
-            return layerFeatures;
+            return layerFeatures.sort(layerName.sort);
           });
         })
         .catch(() => layerNames.map(() => [])),

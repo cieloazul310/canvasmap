@@ -9,6 +9,7 @@ import {
   createNestedPalette,
   getNestedPalette,
   resetNestedPalette,
+  type NestedPaletteNames,
 } from "./utils";
 
 const paletteNames: (keyof Palette)[] = [
@@ -17,10 +18,11 @@ const paletteNames: (keyof Palette)[] = [
   "railway",
   "waterarea",
 ];
-const nestedPaletteNames: ("background" | "road" | "label")[] = [
+const nestedPaletteNames: NestedPaletteNames[] = [
   "background",
   "road",
   "label",
+  "boundary",
 ];
 
 export function createPaletteConfig() {

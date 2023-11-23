@@ -40,7 +40,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "npm-run-all dev:mjs dev:cjs --parallel",
+    "dev": "npm-run-all --parallel dev:mjs dev:cjs",
     "dev:mjs": "tsc --watch -p ./tsconfig.mjs.json",
     "dev:cjs": "tsc --watch -p ./tsconfig.json",
     "clean": "git clean -fx lib/ module/",

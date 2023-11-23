@@ -3,35 +3,31 @@ import {
   textPos,
   getLabelSize,
   type VectorTileLayer,
+  type DspPos,
 } from "./types";
 
-const label: VectorTileLayer = {
+type LabelProperties = { annoCtg: number; knj: string; dspPos: DspPos };
+
+const label: VectorTileLayer<LabelProperties> = {
   layerName: "label",
   render:
     ({ context, theme, projection }) =>
-    (feature) => {
-      if (
-        !feature.properties ||
-        !("knj" in feature.properties) ||
-        !("annoCtg" in feature.properties) ||
-        !feature.geometry ||
-        !("coordinates" in feature.geometry)
-      )
-        return;
+    ({ geometry, properties }) => {
+      if (!("coordinates" in geometry)) return;
       const { fontSizes } = theme;
-      const { knj, annoCtg } = feature.properties;
+      const { knj, annoCtg, dspPos } = properties;
       if (
         ![
           210, 312, 1312, 2312, 321, 1321, 2321, 322, 1322, 2322, 344, 1344,
           2344, 422, 681,
-        ].includes(annoCtg as number)
+        ].includes(annoCtg)
       )
         return;
-      const [x, y] = projection(
-        feature.geometry?.coordinates as [number, number],
-      ) ?? [0, 0];
+      const [x, y] = projection(geometry.coordinates as [number, number]) ?? [
+        0, 0,
+      ];
       context.font = `bold ${fontSizes[getLabelSize(annoCtg)]}pt sans-serif`;
-      const [align, baseline] = textPos(feature);
+      const [align, baseline] = textPos({ dspPos });
       context.textAlign = align;
       context.textBaseline = baseline;
       context.fillStyle = labelColor(annoCtg, theme);

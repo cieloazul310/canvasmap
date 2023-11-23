@@ -17,17 +17,19 @@ export function canonicalizeHex(input?: string | Record<string, string>) {
   return input;
 }
 
-function nestedKeys<T extends "background" | "road" | "label">(variant: T) {
+export type NestedPaletteNames = "background" | "road" | "label" | "boundary";
+
+function nestedKeys<T extends NestedPaletteNames>(variant: T) {
   if (variant === "background")
     return ["main", "contarst"] as (keyof Palette["background"])[];
   if (variant === "road")
     return ["base", "national", "highway"] as (keyof Palette["road"])[];
+  if (variant === "boundary")
+    return ["pref", "town"] as (keyof Palette["boundary"])[];
   return ["base", "em", "water", "terrain"] as (keyof Palette["label"])[];
 }
 
-export function createNestedPalette<T extends "background" | "road" | "label">(
-  variant: T,
-) {
+export function createNestedPalette<T extends NestedPaletteNames>(variant: T) {
   return (target: Element) => {
     const section = document.createElement("div");
     section.className = "palette-section";
@@ -73,9 +75,7 @@ export function createNestedPalette<T extends "background" | "road" | "label">(
   };
 }
 
-export function getNestedPalette<T extends "background" | "road" | "label">(
-  variant: T,
-) {
+export function getNestedPalette<T extends NestedPaletteNames>(variant: T) {
   const keys = nestedKeys(variant);
   const defaultNestedPalette = defaultPalette[variant];
 
@@ -95,9 +95,7 @@ export function getNestedPalette<T extends "background" | "road" | "label">(
   }, {});
 }
 
-export function resetNestedPalette<T extends "background" | "road" | "label">(
-  variant: T,
-) {
+export function resetNestedPalette<T extends NestedPaletteNames>(variant: T) {
   const keys = nestedKeys(variant);
   const defaultNestedPalette = defaultPalette[variant];
 
