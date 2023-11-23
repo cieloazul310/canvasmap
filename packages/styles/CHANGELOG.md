@@ -1,5 +1,13 @@
 # @cieloazul310/canvasmap-styles
 
+## 0.2.2
+
+### Patch Changes
+
+- 0c74b2a: add boundary layer
+- Updated dependencies [0c74b2a]
+  - @cieloazul310/canvasmap-utils@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes

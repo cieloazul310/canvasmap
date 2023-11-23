@@ -1,5 +1,11 @@
 # @cieloazul310/canvasmap-utils
 
+## 0.2.2
+
+### Patch Changes
+
+- 0c74b2a: add boundary layer
+
 ## 0.2.1
 
 ### Patch Changes
