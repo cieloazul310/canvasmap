@@ -1,4 +1,4 @@
-import { defaultPalette, type Palette } from "@cieloazul310/canvasmap";
+import { defaultPalette, type Palette } from "@cieloazul310/canvasmap/browser";
 
 export const onChange = (id: string) => (event: Event) => {
   const { value } = event.target as HTMLInputElement;

@@ -1,9 +1,9 @@
-import { CanvasMapBrowser } from "@cieloazul310/canvasmap";
+import { CanvasMap } from "@cieloazul310/canvasmap/browser";
 import { getConfig, createConfig, resetConfig } from "./config";
 import { createLayersList, getLayerNames, resetLayers } from "./layers";
 import { createPaletteConfig, getPalette, resetPalette } from "./palette";
 
-const map = new CanvasMapBrowser(600, 600);
+const map = new CanvasMap(600, 600);
 
 async function render() {
   const loader = document.querySelector("#loader");
