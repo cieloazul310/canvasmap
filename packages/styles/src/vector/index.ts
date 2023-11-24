@@ -25,7 +25,7 @@ import {
   type VectorTileFeatureProperties,
 } from "./layers";
 
-export { type VectorLayerNames } from "./layers";
+export * from "./layers";
 
 export type VectorTilesOptions = {
   backgroundColor?: string;
@@ -41,7 +41,7 @@ export type VectorTilesOptions = {
   theme: Theme;
 };
 
-async function vectorTiles(
+export async function vectorTiles(
   context: CanvasRenderingContext2D | NodeCanvasRenderingContext2D,
   {
     width,
@@ -136,5 +136,3 @@ async function vectorTiles(
     });
   });
 }
-
-export default vectorTiles;

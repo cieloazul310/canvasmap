@@ -2,7 +2,7 @@ import {
   defaultPalette,
   type Palette,
   type DefinePaletteOptions,
-} from "@cieloazul310/canvasmap";
+} from "@cieloazul310/canvasmap/browser";
 import {
   onChange,
   canonicalizeHex,

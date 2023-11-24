@@ -3,9 +3,8 @@ import type { RasterTilesOptions } from "./base";
 
 async function rasterTilesBrowser(
   context: CanvasRenderingContext2D,
-  { tiles, url, grayScale, width, height, resolution = 1 }: RasterTilesOptions,
+  { tiles, url, grayScale, width, height, tileSize = 256 }: RasterTilesOptions,
 ) {
-  const tileSize = 256 / resolution;
   const [x0, y0] = tiles[0];
   const [x1, y1] = tiles[tiles.length - 1];
   const tile =

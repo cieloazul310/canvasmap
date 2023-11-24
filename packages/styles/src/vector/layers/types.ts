@@ -17,6 +17,25 @@ export type VectorLayerNames =
   | "symbol"
   | "waterarea";
 
+export const vectorLayerNames: VectorLayerNames[] = [
+  "boundary",
+  "building",
+  "contour",
+  "label",
+  "railway",
+  "road",
+  "symbol",
+  "waterarea",
+];
+
+export function vectorLayerNamesExclude(
+  layerNames: VectorLayerNames[],
+): VectorLayerNames[] {
+  return vectorLayerNames.filter(
+    (layerName) => !layerNames.includes(layerName),
+  );
+}
+
 export type VectorTileLayer<P = Record<string, unknown>> = {
   layerName: VectorLayerNames;
   render: ({

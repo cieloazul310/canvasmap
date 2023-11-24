@@ -1,4 +1,4 @@
-import type { VectorLayerNames } from "@cieloazul310/canvasmap";
+import type { VectorLayerNames } from "@cieloazul310/canvasmap/browser";
 
 const layerNames: VectorLayerNames[] = [
   "boundary",

@@ -29,7 +29,7 @@ export type CanvasMapBaseOptions = {
   zoom: number;
   title: string;
   theme: Omit<DefineThemeOptions, "width" | "height">;
-  resolution: number;
+  zoomDelta: number;
 };
 
 export type VectorMapOptions = {
@@ -43,6 +43,7 @@ export type VectorMapOptions = {
 
 export type RasterMapOptions = {
   tileUrl: string;
+  tileSize: number;
   rasterGrayScale: boolean;
   attribution: string;
 };
@@ -62,7 +63,7 @@ class CanvasMapBase {
 
   public title: string | undefined;
 
-  public resolution: number;
+  public zoomDelta: number;
 
   public attribution: string[] = [];
 
@@ -82,7 +83,7 @@ class CanvasMapBase {
     this.projection = geoMercator();
     this.setCenter(options?.center).setZoom(options?.zoom);
 
-    this.resolution = Math.max(0.25, Math.min(options?.resolution ?? 1, 4));
+    this.zoomDelta = Math.max(-2, Math.min(options?.zoomDelta ?? 0, 2));
 
     this.tiles = this.updateTiles();
 
@@ -90,16 +91,12 @@ class CanvasMapBase {
   }
 
   public updateTiles() {
-    const { width, height, resolution } = this;
+    const { width, height, zoomDelta } = this;
     const tile = d3tile()
-      .size([width * resolution, height * resolution])
-      .scale(this.projection.scale() * Math.PI * 2 * resolution)
-      .translate(
-        (this.projection([0, 0])?.map((value) => value * resolution) as [
-          number,
-          number,
-        ]) ?? [0, 0],
-      );
+      .size([width, height])
+      .scale(this.projection.scale() * Math.PI * 2)
+      .translate(this.projection([0, 0]) ?? [0, 0])
+      .zoomDelta(zoomDelta);
     return tile();
   }
 
@@ -122,9 +119,9 @@ class CanvasMapBase {
     return this;
   }
 
-  public setResolution(resolution?: number) {
-    if (resolution) {
-      this.resolution = resolution;
+  public setZoomDelta(zoomDelta?: number) {
+    if (zoomDelta !== undefined) {
+      this.zoomDelta = zoomDelta;
     }
     this.tiles = this.updateTiles();
     return this;
@@ -147,12 +144,14 @@ class CanvasMapBase {
 
   public setTitle(title?: string) {
     this.title = title;
+    this.state.textRendered = false;
     return this;
   }
 
   public setTheme(theme: Omit<DefineThemeOptions, "width" | "height">) {
     const { width, height } = this;
     this.theme = defineTheme({ width, height, ...theme });
+    return this;
   }
 
   public addAttribution(attribution: string) {
