@@ -11,7 +11,7 @@ async function render() {
     loader.classList.add("show");
   }
 
-  const { width, height, lon, lat, zoom, title, resolution } = getConfig();
+  const { width, height, lon, lat, zoom, title, zoomDelta } = getConfig();
   const layers = getLayerNames();
   const palette = getPalette();
 
@@ -20,7 +20,7 @@ async function render() {
   map.setCenter([lon, lat]);
   map.setZoom(zoom);
   map.setTheme({ palette });
-  map.setResolution(resolution);
+  map.setZoomDelta(zoomDelta);
 
   map.clearContext();
   await map.renderVectorMap({ layers }).then(() => {
@@ -40,7 +40,7 @@ async function render() {
         <li>size: ${width}x${height}</li>
         <li>center: ${lon}, ${lat}</li>
         <li>zoom: ${zoom}</li>
-        <li>resolution: ${resolution}</li>
+        <li>zoomDelta: ${zoomDelta}</li>
       </ul>
     `;
 

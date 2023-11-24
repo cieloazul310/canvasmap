@@ -73,6 +73,7 @@ class CanvasMapBrowser extends CanvasMapBase {
   public async renderRasterMap({
     tileUrl,
     attribution,
+    tileSize,
   }: Partial<RasterMapOptions> = {}) {
     const context = this.canvas.getContext("2d");
     const { width, height } = this.canvas;
@@ -82,8 +83,8 @@ class CanvasMapBrowser extends CanvasMapBase {
 
     await rasterTilesBrowser(context, {
       tiles: this.tiles,
-      resolution: this.resolution,
       url: tileUrl,
+      tileSize,
       width,
       height,
     });
