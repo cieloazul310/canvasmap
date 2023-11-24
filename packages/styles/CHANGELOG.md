@@ -1,5 +1,16 @@
 # @cieloazul310/canvasmap-styles
 
+## 0.3.0
+
+### Minor Changes
+
+- c1ae66c: Change export image file system from `node-canvas` to `sharp`
+
+### Patch Changes
+
+- Updated dependencies [c1ae66c]
+  - @cieloazul310/canvasmap-utils@0.3.0
+
 ## 0.2.2
 
 ### Patch Changes

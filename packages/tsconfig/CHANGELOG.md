@@ -1,5 +1,11 @@
 # @cieloazul310/tsconfig
 
+## 0.3.0
+
+### Minor Changes
+
+- c1ae66c: Change export image file system from `node-canvas` to `sharp`
+
 ## 0.2.2
 
 ### Patch Changes
