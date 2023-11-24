@@ -1,24 +1,12 @@
 import {
   CanvasMap,
-  definePalette,
   vectorLayerNamesExclude,
+  bitterPalette,
 } from "@cieloazul310/canvasmap";
 
 const map = new CanvasMap(1200, 630, {
   zoom: 13,
   center: [140.4602, 36.3703],
-});
-
-const palette = definePalette({
-  background: {
-    main: "#eeeee7",
-  },
-  road: {
-    base: "#ffffff",
-    national: "#dabfa4",
-    highway: "#afd4af",
-  },
-  contour: "#cbc7a9",
 });
 
 (async () => {
@@ -48,7 +36,7 @@ const palette = definePalette({
     });
 
   map.clearContext();
-  map.setTheme({ palette });
+  map.setTheme({ palette: bitterPalette });
   await map
     .setTitle("Custom palette (Hi-Res)")
     .renderVectorMap({

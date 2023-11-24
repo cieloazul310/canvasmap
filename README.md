@@ -4,6 +4,8 @@ Canvas マップ -データビジュアライゼーションのための
 
 [![npm version](https://badge.fury.io/js/%40cieloazul310%2Fcanvasmap.svg)](https://badge.fury.io/js/%40cieloazul310%2Fcanvasmap)
 
+![Example](./images/basic.png)
+
 ## Installing
 
 ```sh

@@ -68,9 +68,13 @@ class CanvasMap extends CanvasMapBase {
     background,
     backgroundFeature,
     layers,
+    attribution,
   }: Partial<VectorMapOptions> = {}) {
     const context = this.canvas.getContext("2d");
     const { width, height } = this.canvas;
+
+    this.addAttribution(attribution ?? "国土地理院");
+
     await vectorTiles(context, {
       width,
       height,
@@ -84,9 +88,15 @@ class CanvasMap extends CanvasMapBase {
     return this;
   }
 
-  public async renderRasterMap({ tileUrl }: Partial<RasterMapOptions> = {}) {
+  public async renderRasterMap({
+    tileUrl,
+    attribution,
+  }: Partial<RasterMapOptions> = {}) {
     const context = this.canvas.getContext("2d");
     const { width, height } = this.canvas;
+
+    this.addAttribution(attribution ?? "国土地理院");
+
     await rasterTilesNode(context, {
       tiles: this.tiles,
       resolution: this.resolution,
