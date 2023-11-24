@@ -147,12 +147,14 @@ class CanvasMapBase {
 
   public setTitle(title?: string) {
     this.title = title;
+    this.state.textRendered = false;
     return this;
   }
 
   public setTheme(theme: Omit<DefineThemeOptions, "width" | "height">) {
     const { width, height } = this;
     this.theme = defineTheme({ width, height, ...theme });
+    return this;
   }
 
   public addAttribution(attribution: string) {

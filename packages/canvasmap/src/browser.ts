@@ -171,6 +171,8 @@ class CanvasMapBrowser extends CanvasMapBase {
 
     state.textRendered = false;
     context?.clearRect(0, 0, width, height);
+
+    return this;
   }
 }
 

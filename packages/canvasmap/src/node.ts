@@ -149,10 +149,13 @@ class CanvasMap extends CanvasMapBase {
   }
 
   public clearContext() {
-    const { width, height } = this;
+    const { width, height, state } = this;
     const context = this.canvas.getContext("2d");
+    state.textRendered = false;
 
     context?.clearRect(0, 0, width, height);
+
+    return this;
   }
 
   public exportPng(file: string, config?: PngConfig): CanvasMap {
