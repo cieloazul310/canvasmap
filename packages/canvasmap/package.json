@@ -17,6 +17,17 @@
       },
       "default": "./lib/index.js"
     },
+    "./browser": {
+      "import": {
+        "types": "./module/browser/index.d.ts",
+        "default": "./module/browser/index.js"
+      },
+      "require": {
+        "types": "./lib/browser/index.d.ts",
+        "default": "./lib/browser/index.js"
+      },
+      "default": "./module/browser/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -59,7 +70,8 @@
     "@turf/rewind": "^6.5.0",
     "canvas": "^2.11.2",
     "d3-geo": "^2.0.1",
-    "d3-tile": "^1.0.0"
+    "d3-tile": "^1.0.0",
+    "sharp": "^0.32.6"
   },
   "devDependencies": {
     "@cieloazul310/eslint-config-custom": "^0.2.2",

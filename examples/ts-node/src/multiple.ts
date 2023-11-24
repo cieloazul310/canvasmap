@@ -25,8 +25,8 @@ const palette = definePalette({
   await map
     .setTitle("Basic")
     .renderVectorMap()
-    .then((canvas) => {
-      canvas.exportPng("./dist/multiple/basic.png");
+    .then(async (canvas) => {
+      await canvas.exportPng("./dist/multiple/basic.png");
     })
     .catch((err) => {
       throw new Error(err);
@@ -40,8 +40,8 @@ const palette = definePalette({
     .renderVectorMap({
       layers: vectorLayerNamesExclude(["label", "symbol"]),
     })
-    .then((canvas) => {
-      canvas.exportPng("./dist/multiple/hi-res.png");
+    .then(async (canvas) => {
+      await canvas.exportPng("./dist/multiple/hi-res.png");
     })
     .catch((err) => {
       throw new Error(err);
@@ -54,12 +54,8 @@ const palette = definePalette({
     .renderVectorMap({
       layers: vectorLayerNamesExclude(["label", "symbol"]),
     })
-    .then((canvasMap) => {
-      const canvas = canvasMap.getCanvas();
-      canvasMap.exportPng("./dist/multiple/custom-palette.png", {
-        compressionLevel: 9,
-        filters: canvas.PNG_ALL_FILTERS,
-      });
+    .then(async (canvasMap) => {
+      await canvasMap.exportPng("./dist/multiple/custom-palette.png");
     })
     .catch((err) => {
       throw new Error(err);
@@ -69,8 +65,24 @@ const palette = definePalette({
   await map
     .setTitle("Raster (Hi-Res)")
     .renderRasterMap()
-    .then((canvas) => {
-      canvas.exportPng("./dist/multiple/raster.png");
+    .then(async (canvas) => {
+      await canvas.exportPng("./dist/multiple/raster.png", {
+        palette: false,
+        colors: undefined,
+      });
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+
+  map.clearContext();
+  await map
+    .setTitle("Webp (Hi-Res)")
+    .renderVectorMap({
+      layers: vectorLayerNamesExclude(["label", "symbol"]),
+    })
+    .then(async (canvasMap) => {
+      await canvasMap.exportWebp("./dist/multiple/custom-palette.webp");
     })
     .catch((err) => {
       throw new Error(err);
