@@ -62,4 +62,4 @@ jobs:
       - name: Check images
         run: |
           du -sh ${{ github.workspace }}/examples/node/dist/basic.png
-          du -sh ${{ github.workspace }}/examples/ts-node/dist/basic.png
+          du -sh ${{ github.workspace }}/examples/ts-node/dist/multiple/basic.png
