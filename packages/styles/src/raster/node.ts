@@ -9,9 +9,8 @@ import type { RasterTilesOptions } from "./base";
 
 async function rasterTilesNode(
   context: NodeCanvasRenderingContext2D,
-  { tiles, url, width, height, grayScale, resolution = 1 }: RasterTilesOptions,
+  { tiles, url, width, height, grayScale, tileSize = 256 }: RasterTilesOptions,
 ) {
-  const tileSize = 256;
   const [x0, y0] = tiles[0];
   const [x1, y1] = tiles[tiles.length - 1];
   const tile =
@@ -34,18 +33,18 @@ async function rasterTilesNode(
     if (image) {
       offscreenContext.drawImage(
         image,
-        ((x - x0) * tileSize) / resolution,
-        ((y - y0) * tileSize) / resolution,
-        tileSize / resolution,
-        tileSize / resolution,
+        (x - x0) * tileSize,
+        (y - y0) * tileSize,
+        tileSize,
+        tileSize,
       );
     }
   });
 
   context.drawImage(
     offscreenContext.canvas,
-    Math.round(((x0 + tiles.translate[0]) * tiles.scale) / resolution),
-    Math.round(((y0 + tiles.translate[1]) * tiles.scale) / resolution),
+    Math.round((x0 + tiles.translate[0]) * tiles.scale),
+    Math.round((y0 + tiles.translate[1]) * tiles.scale),
     (x1 - x0 + 1) * tiles.scale,
     (y1 - y0 + 1) * tiles.scale,
   );

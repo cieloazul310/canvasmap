@@ -48,14 +48,14 @@ const fields = [
     defaultValue: 15,
   },
   {
-    id: "resolution",
-    name: "Resolution",
+    id: "zoomDelta",
+    name: "ZoomDelta",
     type: "number",
     required: true,
-    min: 0.25,
-    max: 4,
-    step: 0.25,
-    defaultValue: 1,
+    min: -2,
+    max: 2,
+    step: 1,
+    defaultValue: 0,
   },
   {
     id: "title",
@@ -141,11 +141,11 @@ export function getView() {
   };
 }
 
-export function getResolution() {
-  const r = document.querySelector<HTMLInputElement>("#resolution");
-  if (!r) return 1;
+export function getZoomDelta() {
+  const r = document.querySelector<HTMLInputElement>("#zoomDelta");
+  if (!r) return 0;
 
-  return parseFloat(r?.value);
+  return parseInt(r?.value, 10);
 }
 
 export function getTitle() {
@@ -157,10 +157,10 @@ export function getTitle() {
 export function getConfig() {
   const { width, height } = getSize();
   const { lon, lat, zoom } = getView();
-  const resolution = getResolution();
+  const zoomDelta = getZoomDelta();
   const title = getTitle();
 
-  return { width, height, lon, lat, zoom, title, resolution };
+  return { width, height, lon, lat, zoom, title, zoomDelta };
 }
 
 export function resetConfig() {

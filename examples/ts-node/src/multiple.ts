@@ -1,24 +1,12 @@
 import {
   CanvasMap,
-  definePalette,
   vectorLayerNamesExclude,
+  bitterPalette,
 } from "@cieloazul310/canvasmap";
 
 const map = new CanvasMap(1200, 630, {
   zoom: 13,
   center: [140.4602, 36.3703],
-});
-
-const palette = definePalette({
-  background: {
-    main: "#eeeee7",
-  },
-  road: {
-    base: "#ffffff",
-    national: "#dabfa4",
-    highway: "#afd4af",
-  },
-  contour: "#cbc7a9",
 });
 
 (async () => {
@@ -32,10 +20,9 @@ const palette = definePalette({
       throw new Error(err);
     });
 
-  map.clearContext();
-
   await map
-    .setResolution(2)
+    .clearContext()
+    .setZoomDelta(1)
     .setTitle("Hi-Res")
     .renderVectorMap({
       layers: vectorLayerNamesExclude(["label", "symbol"]),
@@ -47,9 +34,9 @@ const palette = definePalette({
       throw new Error(err);
     });
 
-  map.clearContext();
-  map.setTheme({ palette });
   await map
+    .clearContext()
+    .setTheme({ palette: bitterPalette })
     .setTitle("Custom palette (Hi-Res)")
     .renderVectorMap({
       layers: vectorLayerNamesExclude(["label", "symbol"]),
@@ -61,8 +48,8 @@ const palette = definePalette({
       throw new Error(err);
     });
 
-  map.clearContext();
   await map
+    .clearContext()
     .setTitle("Raster (Hi-Res)")
     .renderRasterMap()
     .then(async (canvas) => {
@@ -75,14 +62,26 @@ const palette = definePalette({
       throw new Error(err);
     });
 
-  map.clearContext();
   await map
+    .clearContext()
     .setTitle("Webp (Hi-Res)")
     .renderVectorMap({
       layers: vectorLayerNamesExclude(["label", "symbol"]),
     })
     .then(async (canvasMap) => {
       await canvasMap.exportWebp("./dist/multiple/custom-palette.webp");
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+
+  await map
+    .clearContext()
+    .setZoomDelta(-1)
+    .setTitle("Webp (Hi-Res)")
+    .renderRasterMap()
+    .then(async (canvasMap) => {
+      await canvasMap.exportWebp("./dist/multiple/raster-zoom-minus.webp");
     })
     .catch((err) => {
       throw new Error(err);
