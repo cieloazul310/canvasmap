@@ -1,5 +1,11 @@
 # @cieloazul310/tsconfig
 
+## 0.3.1
+
+### Patch Changes
+
+- 63797c1: add cli package
+
 ## 0.3.0
 
 ### Minor Changes
