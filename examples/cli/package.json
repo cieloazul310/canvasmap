@@ -1,0 +1,16 @@
+{
+  "name": "canvasmap-cli",
+  "private": true,
+  "version": "0.3.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "canvasmap-vector": "canvasmap-vector",
+    "canvasmap-raster": "canvasmap-raster"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@cieloazul310/canvasmap-cli": "^0.3.0"
+  }
+}

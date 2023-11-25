@@ -1,0 +1,50 @@
+{
+  "name": "@cieloazul310/canvasmap-cli",
+  "version": "0.3.0",
+  "description": "CLI for CanvasMap",
+  "main": "lib/index.js",
+  "bin": {
+    "canvasmap-vector": "./bin/vector.js",
+    "canvasmap-raster": "./bin/raster.js"
+  },
+  "files": [
+    "lib",
+    "bin"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "@cieloazul310",
+    "url": "https://cieloazul310.github.io"
+  },
+  "keywords": [
+    "Data Visualization",
+    "D3.js",
+    "Canvas"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "vector": "node bin/vector.js --width 600 --height 600 -o ./dist/vector.png",
+    "raster": "node bin/raster.js --width 600 --height 600 -o ./dist/raster.jpg",
+    "clean": "git clean -fx lib/",
+    "tsc": "tsc -p ./tsconfig.json",
+    "build": "npm-run-all clean tsc",
+    "check-types": "tsc --noEmit",
+    "eslint": "eslint src/**/*.ts --fix",
+    "lint": "npm-run-all eslint check-types"
+  },
+  "dependencies": {
+    "@cieloazul310/canvasmap": "^0.3.0",
+    "@commander-js/extra-typings": "^11.1.0",
+    "commander": "^11.1.0"
+  },
+  "devDependencies": {
+    "@cieloazul310/eslint-config-custom": "^0.3.0",
+    "@cieloazul310/tsconfig": "^0.3.0",
+    "typescript": "^5.2.2"
+  }
+}
