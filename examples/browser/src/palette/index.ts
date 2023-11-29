@@ -12,16 +12,12 @@ import {
   type NestedPaletteNames,
 } from "./utils";
 
-const paletteNames: (keyof Palette)[] = [
-  "building",
-  "contour",
-  "railway",
-  "waterarea",
-];
+const paletteNames: (keyof Palette)[] = ["building", "contour", "waterarea"];
 const nestedPaletteNames: NestedPaletteNames[] = [
   "background",
   "road",
   "label",
+  "railway",
   "boundary",
 ];
 

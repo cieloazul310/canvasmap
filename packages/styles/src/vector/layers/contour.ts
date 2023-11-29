@@ -4,8 +4,8 @@ type ContourProperties = {
   alti: number;
 };
 
-function contourWidth({ alti }: ContourProperties): number {
-  return (alti as number) % 50 === 0 ? 1 : 0.5;
+function contourWidth({ alti }: ContourProperties) {
+  return alti % 50 === 0 ? 1 : 0.5;
 }
 
 const contour: VectorTileLayer<ContourProperties> = {

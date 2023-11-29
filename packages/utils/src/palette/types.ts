@@ -8,7 +8,10 @@ export type Palette = {
     town: string;
   };
   waterarea: string;
-  railway: string;
+  railway: {
+    section: string;
+    station: string;
+  };
   road: {
     national: string;
     highway: string;
