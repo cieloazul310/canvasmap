@@ -1,6 +1,6 @@
 import { geoMercator, type GeoProjection, type ExtendedFeature } from "d3-geo";
 import { tile as d3tile, type Tiles } from "d3-tile";
-import bbox from "@turf/bbox";
+import turfBBox from "@turf/bbox";
 import bboxPolygon from "@turf/bbox-polygon";
 import rewind from "@turf/rewind";
 import type {
@@ -9,6 +9,7 @@ import type {
   MultiPolygon,
   Position,
   FeatureCollection,
+  BBox,
 } from "@turf/helpers";
 import type { VectorLayerNames } from "@cieloazul310/canvasmap-styles";
 import {
@@ -127,6 +128,19 @@ class CanvasMapBase {
     return this;
   }
 
+  public setProjectionBBox(bbox: BBox) {
+    const { width, height } = this;
+    this.projection.fitExtent(
+      [
+        [this.theme.padding.left, this.theme.padding.top],
+        [width - this.theme.padding.right, height - this.theme.padding.bottom],
+      ],
+      rewind(bboxPolygon(bbox), { reverse: true }),
+    );
+    this.tiles = this.updateTiles();
+    return this;
+  }
+
   public setProjectionFitExtent(feature: ExtendedFeature | FeatureCollection) {
     const { width, height } = this;
     this.projection.fitExtent(
@@ -136,7 +150,7 @@ class CanvasMapBase {
       ],
       isFeature(feature)
         ? feature
-        : rewind(bboxPolygon(bbox(feature)), { reverse: true }),
+        : rewind(bboxPolygon(turfBBox(feature)), { reverse: true }),
     );
     this.tiles = this.updateTiles();
     return this;
