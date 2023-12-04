@@ -1,7 +1,7 @@
 {
   "name": "canvasmap-cli",
   "private": true,
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@cieloazul310/canvasmap-cli": "^0.3.1"
+    "@cieloazul310/canvasmap-cli": "^0.4.0"
   }
 }

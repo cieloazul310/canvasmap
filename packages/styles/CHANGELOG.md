@@ -1,5 +1,18 @@
 # @cieloazul310/canvasmap-styles
 
+## 0.4.0
+
+### Minor Changes
+
+- 3079290: - Rename from `CanvasmapBrowser` to `CanvasMap`
+
+  - Enable to set projection from bbox
+
+### Patch Changes
+
+- Updated dependencies [3079290]
+  - @cieloazul310/canvasmap-utils@0.4.0
+
 ## 0.3.1
 
 ### Patch Changes
