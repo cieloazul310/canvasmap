@@ -48,25 +48,25 @@ export type RasterMapOptions = {
 export type TileMapOptions = VectorMapOptions & RasterMapOptions;
 
 class CanvasMapBase {
-  public width: number;
+  width: number;
 
-  public height: number;
+  height: number;
 
-  public projection: GeoProjection;
+  projection: GeoProjection;
 
-  public tiles: Tiles;
+  tiles: Tiles;
 
-  public theme: Theme;
+  theme: Theme;
 
-  public title: string | undefined;
+  title: string | undefined;
 
-  public zoomDelta: number;
+  zoomDelta: number;
 
-  public bbox: BBox | undefined = undefined;
+  bbox: BBox | undefined = undefined;
 
-  public attribution: string[] = [];
+  attribution: string[] = [];
 
-  public state: { textRendered: boolean } = { textRendered: false };
+  state: { textRendered: boolean } = { textRendered: false };
 
   constructor(
     width: number,
@@ -92,7 +92,7 @@ class CanvasMapBase {
     this.setTitle(options?.title);
   }
 
-  public generateTiles() {
+  generateTiles() {
     const { width, height, zoomDelta } = this;
     const tile = d3tile()
       .size([width, height])
@@ -102,21 +102,21 @@ class CanvasMapBase {
     return tile();
   }
 
-  public updateTiles() {
+  updateTiles() {
     this.tiles = this.generateTiles();
   }
 
-  public setCenter(center?: Position) {
+  setCenter(center?: Position) {
     this.updateProjection({ center });
     return this;
   }
 
-  public setZoom(zoom?: number) {
+  setZoom(zoom?: number) {
     this.updateProjection({ zoom });
     return this;
   }
 
-  public setZoomDelta(zoomDelta?: number) {
+  setZoomDelta(zoomDelta?: number) {
     if (zoomDelta !== undefined) {
       this.zoomDelta = zoomDelta;
     }
@@ -124,7 +124,7 @@ class CanvasMapBase {
     return this;
   }
 
-  public updateProjection({
+  updateProjection({
     center,
     zoom,
     bbox,
@@ -165,13 +165,13 @@ class CanvasMapBase {
     return this;
   }
 
-  public setBBox(bbox: BBox | undefined) {
+  setBBox(bbox: BBox | undefined) {
     this.bbox = bbox;
     this.updateProjection();
     return this;
   }
 
-  public clearBBox() {
+  clearBBox() {
     if (this.bbox) {
       const lon = this.bbox[0] + (this.bbox[2] - this.bbox[0]) / 2;
       const lat = this.bbox[1] + (this.bbox[3] - this.bbox[1]) / 2;
@@ -182,48 +182,48 @@ class CanvasMapBase {
     return this;
   }
 
-  public setProjectionFitExtent(feature: ExtendedFeature | FeatureCollection) {
+  setProjectionFitExtent(feature: ExtendedFeature | FeatureCollection) {
     this.setBBox(turfBBox(feature));
     return this;
   }
 
-  public setTitle(title?: string) {
+  setTitle(title?: string) {
     this.title = title;
     this.state.textRendered = false;
     return this;
   }
 
-  public setTheme(theme: Omit<DefineThemeOptions, "width" | "height">) {
+  setTheme(theme: Omit<DefineThemeOptions, "width" | "height">) {
     const { width, height } = this;
     this.theme = defineTheme({ width, height, ...theme });
     return this;
   }
 
-  public addAttribution(attribution: string) {
+  addAttribution(attribution: string) {
     if (!this.attribution.includes(attribution))
       this.attribution.push(attribution);
     return this;
   }
 
-  public getSize() {
+  getSize() {
     const { width, height } = this;
     return { width, height };
   }
 
-  public getBBox() {
+  getBBox() {
     return this.bbox;
   }
 
-  public getProjection() {
+  getProjection() {
     return this.projection;
   }
 
-  public getZoom() {
+  getZoom() {
     const { projection } = this;
     return scaleToZoom(projection.scale());
   }
 
-  public getTiles() {
+  getTiles() {
     return this.tiles;
   }
 }
