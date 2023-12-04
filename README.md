@@ -123,6 +123,11 @@ zoomDelta: <https://observablehq.com/@d3/tile-zoomdelta?collection=@d3/d3-tile>
 - *arguments*: `Feature | FeatureCollection`
 - *returns*: `this`
 
+##### setProjectionBBox
+
+- *arguments*: `bbox` ([*minX*, *minY*, *maxX*, *maxY*])
+- *returns*: `this`
+
 ##### setTitle
 
 - *arguments*: `string`
@@ -145,6 +150,10 @@ zoomDelta: <https://observablehq.com/@d3/tile-zoomdelta?collection=@d3/d3-tile>
 ##### getProjection
 
 - *returns*: `Projection` ([d3-geo])
+
+##### getZoom
+
+- *returns*: `number`
 
 ##### getTiles
 

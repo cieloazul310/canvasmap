@@ -41,7 +41,7 @@ class CanvasMapBrowser extends CanvasMapBase {
       this.height = height;
       this.canvas.height = height;
     }
-    this.tiles = this.updateTiles();
+    this.updateProjection();
     return this;
   }
 

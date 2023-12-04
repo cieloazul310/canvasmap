@@ -15,15 +15,10 @@ import type { VectorLayerNames } from "@cieloazul310/canvasmap-styles";
 import {
   defineTheme,
   zoomToScale,
+  scaleToZoom,
   type Theme,
   type DefineThemeOptions,
 } from "@cieloazul310/canvasmap-utils";
-
-function isFeature(
-  obj?: ExtendedFeature | FeatureCollection | Record<string, unknown>,
-): obj is ExtendedFeature {
-  return typeof obj === "object" && obj.type === "Feature";
-}
 
 export type CanvasMapBaseOptions = {
   center: Position;
@@ -31,6 +26,7 @@ export type CanvasMapBaseOptions = {
   title: string;
   theme: Omit<DefineThemeOptions, "width" | "height">;
   zoomDelta: number;
+  bbox: BBox;
 };
 
 export type VectorMapOptions = {
@@ -66,6 +62,8 @@ class CanvasMapBase {
 
   public zoomDelta: number;
 
+  public bbox: BBox | undefined = undefined;
+
   public attribution: string[] = [];
 
   public state: { textRendered: boolean } = { textRendered: false };
@@ -82,16 +80,19 @@ class CanvasMapBase {
     this.theme = defineTheme({ width, height, ...options?.theme });
 
     this.projection = geoMercator();
-    this.setCenter(options?.center).setZoom(options?.zoom);
-
     this.zoomDelta = Math.max(-2, Math.min(options?.zoomDelta ?? 0, 2));
+    this.updateProjection({
+      center: options?.center,
+      zoom: options?.zoom,
+      bbox: options?.bbox,
+    });
 
-    this.tiles = this.updateTiles();
+    this.tiles = this.generateTiles();
 
     this.setTitle(options?.title);
   }
 
-  public updateTiles() {
+  public generateTiles() {
     const { width, height, zoomDelta } = this;
     const tile = d3tile()
       .size([width, height])
@@ -101,22 +102,17 @@ class CanvasMapBase {
     return tile();
   }
 
+  public updateTiles() {
+    this.tiles = this.generateTiles();
+  }
+
   public setCenter(center?: Position) {
-    const { width, height } = this;
-    if (center) {
-      this.projection
-        .center(center as [number, number])
-        .translate([width / 2, height / 2]);
-    }
-    this.tiles = this.updateTiles();
+    this.updateProjection({ center });
     return this;
   }
 
   public setZoom(zoom?: number) {
-    if (zoom) {
-      this.projection.scale(zoomToScale(zoom));
-    }
-    this.tiles = this.updateTiles();
+    this.updateProjection({ zoom });
     return this;
   }
 
@@ -124,35 +120,70 @@ class CanvasMapBase {
     if (zoomDelta !== undefined) {
       this.zoomDelta = zoomDelta;
     }
-    this.tiles = this.updateTiles();
+    this.updateTiles();
     return this;
   }
 
-  public setProjectionBBox(bbox: BBox) {
+  public updateProjection({
+    center,
+    zoom,
+    bbox,
+  }: Partial<Pick<CanvasMapBaseOptions, "center" | "zoom" | "bbox">> = {}) {
     const { width, height } = this;
-    this.projection.fitExtent(
-      [
-        [this.theme.padding.left, this.theme.padding.top],
-        [width - this.theme.padding.right, height - this.theme.padding.bottom],
-      ],
-      rewind(bboxPolygon(bbox), { reverse: true }),
-    );
-    this.tiles = this.updateTiles();
+    const currentCenter = this.projection.center();
+    if (bbox) {
+      this.bbox = bbox;
+    }
+
+    if (this.bbox) {
+      this.projection.fitExtent(
+        [
+          [this.theme.padding.left, this.theme.padding.top],
+          [
+            width - this.theme.padding.right,
+            height - this.theme.padding.bottom,
+          ],
+        ],
+        rewind(bboxPolygon(this.bbox), { reverse: true }),
+      );
+    } else {
+      if (center) {
+        this.projection
+          .center(center as [number, number])
+          .translate([width / 2, height / 2]);
+      }
+      if (currentCenter[0] !== 0 && currentCenter[1] !== 0) {
+        this.projection
+          .center(currentCenter)
+          .translate([width / 2, height / 2]);
+      }
+      if (zoom) {
+        this.projection.scale(zoomToScale(zoom));
+      }
+    }
+    this.updateTiles();
+    return this;
+  }
+
+  public setBBox(bbox: BBox | undefined) {
+    this.bbox = bbox;
+    this.updateProjection();
+    return this;
+  }
+
+  public clearBBox() {
+    if (this.bbox) {
+      const lon = this.bbox[0] + (this.bbox[2] - this.bbox[0]) / 2;
+      const lat = this.bbox[1] + (this.bbox[3] - this.bbox[1]) / 2;
+      this.bbox = undefined;
+      this.setCenter([lon, lat]);
+    }
+
     return this;
   }
 
   public setProjectionFitExtent(feature: ExtendedFeature | FeatureCollection) {
-    const { width, height } = this;
-    this.projection.fitExtent(
-      [
-        [this.theme.padding.left, this.theme.padding.top],
-        [width - this.theme.padding.right, height - this.theme.padding.bottom],
-      ],
-      isFeature(feature)
-        ? feature
-        : rewind(bboxPolygon(turfBBox(feature)), { reverse: true }),
-    );
-    this.tiles = this.updateTiles();
+    this.setBBox(turfBBox(feature));
     return this;
   }
 
@@ -179,8 +210,17 @@ class CanvasMapBase {
     return { width, height };
   }
 
+  public getBBox() {
+    return this.bbox;
+  }
+
   public getProjection() {
     return this.projection;
+  }
+
+  public getZoom() {
+    const { projection } = this;
+    return scaleToZoom(projection.scale());
   }
 
   public getTiles() {

@@ -1,1 +1,6 @@
-{}
+{
+  "extends": "@cieloazul310/tsconfig/base",
+  "compilerOptions": {
+    "moduleResolution": "node"
+  }
+}

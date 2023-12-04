@@ -4,6 +4,8 @@ Canvas マップ -データビジュアライゼーションのための
 
 [![npm version](https://badge.fury.io/js/%40cieloazul310%2Fcanvasmap.svg)](https://badge.fury.io/js/%40cieloazul310%2Fcanvasmap)
 
+![Example](../../images/basic.png)
+
 ## Installing
 
 ```sh
@@ -55,11 +57,11 @@ map
 ### Browser
 
 ```ts
-import { CanvasMapBrowser } from "@cieloazul310/canvasmap";
+import { CanvasMap } from "@cieloazul310/canvasmap/browser";
 
 const width = 1000;
 const height = 1000;
-const map = new CanvasMapBrowser(width, height, {
+const map = new CanvasMap(width, height, {
   center: [140.4602, 36.3703],
   zoom: 13,
 });
@@ -95,7 +97,9 @@ const map = new CanvasMap(width, height, options);
 | center | `[number, number]` | The center of map view |
 | zoom   | `number` | Zoom level of map view |
 | theme | `Partial<Theme>` | Map theme including padding, palette and fontSizes |
-| resolution | `number` |  (if the `zoom` is *12* and the `resolution` is *2*, the tile zoom level will be **13** ; default to 1) |
+| zoomDelta | `number` |  (if the `zoom` is *12* and the `zoomDelta` is *1*, the tile zoom level will be **13** ; default to 1). |
+
+zoomDelta: <https://observablehq.com/@d3/tile-zoomdelta?collection=@d3/d3-tile>
 
 #### Common Methods
 
@@ -109,9 +113,19 @@ const map = new CanvasMap(width, height, options);
 - *arguments*: `number`
 - *returns*: `this`
 
+##### setZoomDelta
+
+- *arguments*: `number`
+- *returns*: `this`
+
 ##### setProjectionFitExtent
 
 - *arguments*: `Feature | FeatureCollection`
+- *returns*: `this`
+
+##### setProjectionBBox
+
+- *arguments*: `bbox` ([*minX*, *minY*, *maxX*, *maxY*])
 - *returns*: `this`
 
 ##### setTitle
@@ -137,11 +151,15 @@ const map = new CanvasMap(width, height, options);
 
 - *returns*: `Projection` ([d3-geo])
 
+##### getZoom
+
+- *returns*: `number`
+
 ##### getTiles
 
 - *returns*: `Tiles` ([d3-tile])
 
-#### `CanvasMap` Methods (node)
+#### `CanvasMap` (node) Methods
 
 ##### getCanvas
 
@@ -155,7 +173,7 @@ const map = new CanvasMap(width, height, options);
 
 - *returns*: `GeoPath` ([d3-geo])
 
-##### await renderVectorMap
+##### renderVectorMap
 
 - *arguments*: Options (*optional*)
 - *returns*: `Promise<this>`
@@ -168,7 +186,7 @@ const map = new CanvasMap(width, height, options);
 
 `VectorLayerNames`: `"building" | "contour" | "label" | "railway" | "road" | "symbol" | "waterarea"`
 
-##### *await* renderRasterMap
+##### *async* renderRasterMap
 
 - *arguments*: Options(*optional*)
 - *returns*: `Promise<this>`
@@ -177,21 +195,28 @@ const map = new CanvasMap(width, height, options);
 |------|-------|-|
 | tileUrl | `string` | Raster tile url (default to `https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png` ) |
 
-##### exportPng
+##### *async* exportPng
 
 - *arguments*:
   - fileName: `string`
-  - options: `PngConfig` ([node-canvas])
-- *returns*: `this` (CanvasMap class)
+  - options: `PngOptions` ([sharp](https://sharp.pixelplumbing.com/api-output#png))
+- *returns*: `Promise<this>` (CanvasMap class)
 
-##### exportJpg
+##### *async* exportJpg
 
 - *arguments*:
   - filename: `string`
-  - options: `JpegConfig` ([node-canvas])
-- *returns*: `this` (CanvasMap class)
+  - options: `JpegOptions` ([sharp](https://sharp.pixelplumbing.com/api-output#jpeg))
+- *returns*: `Promise<this>` (CanvasMap class)
 
-#### `CanvasMapBrowser` Methods (browser)
+##### *async* exportWebp
+
+- *arguments*:
+  - filename: `string`
+  - options: `WebpOptions` ([sharp](https://sharp.pixelplumbing.com/api-output#webp))
+- *returns*: `Promise<this>` (CanvasMap class)
+
+#### `CanvasMap` (browser) Methods
 
 ##### getCanvas
 
@@ -205,20 +230,20 @@ const map = new CanvasMap(width, height, options);
 
 - *returns*: `GeoPath` ([d3-geo])
 
-##### await renderVectorMap
+##### async renderVectorMap
 
 - *arguments*: Options (*optional*)
 - *returns*: `Promise<this>`
 
 | name | types | |
 |------|-------|-|
-| background | `string` | Background color |
+| background | `string` | Background color or `none` |
 | backgroundFeature | `Feature \| FeatureCollection` | Emphasized feature as background. |
 | layers | `VectorLayerNames[]` | VectorLayerNames to render. |
 
 `VectorLayerNames`: `"building" | "contour" | "label" | "railway" | "road" | "symbol" | "waterarea"`
 
-##### *await* renderRasterMap
+##### *async* renderRasterMap
 
 - *arguments*: Options(*optional*)
 - *returns*: `Promise<this>`
@@ -226,6 +251,7 @@ const map = new CanvasMap(width, height, options);
 | name | types | |
 |------|-------|-|
 | tileUrl | `string` | Raster tile url (default to `https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png` ) |
+| tileSize | `number` | tile size |
 
 ## Recipes
 
