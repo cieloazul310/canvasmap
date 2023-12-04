@@ -1,6 +1,6 @@
 {
   "name": "@cieloazul310/canvasmap-utils",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "",
   "main": "lib/index.js",
   "module": "module/index.js",
@@ -51,8 +51,8 @@
     "lint": "npm-run-all eslint check-types"
   },
   "devDependencies": {
-    "@cieloazul310/eslint-config-custom": "^0.3.1",
-    "@cieloazul310/tsconfig": "^0.3.1",
+    "@cieloazul310/eslint-config-custom": "^0.4.0",
+    "@cieloazul310/tsconfig": "^0.4.0",
     "typescript": "^5.2.2"
   }
 }
