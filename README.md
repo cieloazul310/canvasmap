@@ -123,7 +123,7 @@ zoomDelta: <https://observablehq.com/@d3/tile-zoomdelta?collection=@d3/d3-tile>
 - *arguments*: `Feature | FeatureCollection`
 - *returns*: `this`
 
-##### setProjectionBBox
+##### setBBox
 
 - *arguments*: `bbox` ([*minX*, *minY*, *maxX*, *maxY*])
 - *returns*: `this`
@@ -141,6 +141,10 @@ zoomDelta: <https://observablehq.com/@d3/tile-zoomdelta?collection=@d3/d3-tile>
 ##### setTheme
 
 - *arguments*: `Partial<{ padding: Partial<Padding>; palette: Partial<Palette> }>`
+- *returns*: `this`
+
+##### clearBBox
+
 - *returns*: `this`
 
 ##### getSize
@@ -173,7 +177,7 @@ zoomDelta: <https://observablehq.com/@d3/tile-zoomdelta?collection=@d3/d3-tile>
 
 - *returns*: `GeoPath` ([d3-geo])
 
-##### renderVectorMap
+##### *async* renderVectorMap
 
 - *arguments*: Options (*optional*)
 - *returns*: `Promise<this>`
@@ -184,7 +188,7 @@ zoomDelta: <https://observablehq.com/@d3/tile-zoomdelta?collection=@d3/d3-tile>
 | backgroundFeature | `Feature \| FeatureCollection` | Emphasized feature as background. |
 | layers | `VectorLayerNames[]` | VectorLayerNames to render. |
 
-`VectorLayerNames`: `"building" | "contour" | "label" | "railway" | "road" | "symbol" | "waterarea"`
+`VectorLayerNames`: `"boundary"` | `"building" | "contour" | "label" | "railway" | "road" | "symbol" | "waterarea"`
 
 ##### *async* renderRasterMap
 
@@ -194,6 +198,7 @@ zoomDelta: <https://observablehq.com/@d3/tile-zoomdelta?collection=@d3/d3-tile>
 | name | types | |
 |------|-------|-|
 | tileUrl | `string` | Raster tile url (default to `https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png` ) |
+| tileSize | `number` | Tile image size (default to 256) |
 
 ##### *async* exportPng
 
@@ -230,7 +235,7 @@ zoomDelta: <https://observablehq.com/@d3/tile-zoomdelta?collection=@d3/d3-tile>
 
 - *returns*: `GeoPath` ([d3-geo])
 
-##### async renderVectorMap
+##### *async* renderVectorMap
 
 - *arguments*: Options (*optional*)
 - *returns*: `Promise<this>`
@@ -241,7 +246,7 @@ zoomDelta: <https://observablehq.com/@d3/tile-zoomdelta?collection=@d3/d3-tile>
 | backgroundFeature | `Feature \| FeatureCollection` | Emphasized feature as background. |
 | layers | `VectorLayerNames[]` | VectorLayerNames to render. |
 
-`VectorLayerNames`: `"building" | "contour" | "label" | "railway" | "road" | "symbol" | "waterarea"`
+`VectorLayerNames`: `"boundary"` | `"building" | "contour" | "label" | "railway" | "road" | "symbol" | "waterarea"`
 
 ##### *async* renderRasterMap
 
@@ -251,7 +256,7 @@ zoomDelta: <https://observablehq.com/@d3/tile-zoomdelta?collection=@d3/d3-tile>
 | name | types | |
 |------|-------|-|
 | tileUrl | `string` | Raster tile url (default to `https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png` ) |
-| tileSize | `number` | tile size |
+| tileSize | `number` | Tile image size (default to 256) |
 
 ## Recipes
 
