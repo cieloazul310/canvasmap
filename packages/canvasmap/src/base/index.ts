@@ -1,6 +1,6 @@
 import { geoMercator, type GeoProjection, type ExtendedFeature } from "d3-geo";
 import { tile as d3tile, type Tiles } from "d3-tile";
-import bbox from "@turf/bbox";
+import turfBBox from "@turf/bbox";
 import bboxPolygon from "@turf/bbox-polygon";
 import rewind from "@turf/rewind";
 import type {
@@ -9,20 +9,16 @@ import type {
   MultiPolygon,
   Position,
   FeatureCollection,
+  BBox,
 } from "@turf/helpers";
 import type { VectorLayerNames } from "@cieloazul310/canvasmap-styles";
 import {
   defineTheme,
   zoomToScale,
+  scaleToZoom,
   type Theme,
   type DefineThemeOptions,
 } from "@cieloazul310/canvasmap-utils";
-
-function isFeature(
-  obj?: ExtendedFeature | FeatureCollection | Record<string, unknown>,
-): obj is ExtendedFeature {
-  return typeof obj === "object" && obj.type === "Feature";
-}
 
 export type CanvasMapBaseOptions = {
   center: Position;
@@ -30,6 +26,7 @@ export type CanvasMapBaseOptions = {
   title: string;
   theme: Omit<DefineThemeOptions, "width" | "height">;
   zoomDelta: number;
+  bbox: BBox;
 };
 
 export type VectorMapOptions = {
@@ -51,23 +48,25 @@ export type RasterMapOptions = {
 export type TileMapOptions = VectorMapOptions & RasterMapOptions;
 
 class CanvasMapBase {
-  public width: number;
+  width: number;
 
-  public height: number;
+  height: number;
 
-  public projection: GeoProjection;
+  projection: GeoProjection;
 
-  public tiles: Tiles;
+  tiles: Tiles;
 
-  public theme: Theme;
+  theme: Theme;
 
-  public title: string | undefined;
+  title: string | undefined;
 
-  public zoomDelta: number;
+  zoomDelta: number;
 
-  public attribution: string[] = [];
+  bbox: BBox | undefined = undefined;
 
-  public state: { textRendered: boolean } = { textRendered: false };
+  attribution: string[] = [];
+
+  state: { textRendered: boolean } = { textRendered: false };
 
   constructor(
     width: number,
@@ -81,16 +80,19 @@ class CanvasMapBase {
     this.theme = defineTheme({ width, height, ...options?.theme });
 
     this.projection = geoMercator();
-    this.setCenter(options?.center).setZoom(options?.zoom);
-
     this.zoomDelta = Math.max(-2, Math.min(options?.zoomDelta ?? 0, 2));
+    this.updateProjection({
+      center: options?.center,
+      zoom: options?.zoom,
+      bbox: options?.bbox,
+    });
 
-    this.tiles = this.updateTiles();
+    this.tiles = this.generateTiles();
 
     this.setTitle(options?.title);
   }
 
-  public updateTiles() {
+  generateTiles() {
     const { width, height, zoomDelta } = this;
     const tile = d3tile()
       .size([width, height])
@@ -100,76 +102,128 @@ class CanvasMapBase {
     return tile();
   }
 
-  public setCenter(center?: Position) {
-    const { width, height } = this;
-    if (center) {
-      this.projection
-        .center(center as [number, number])
-        .translate([width / 2, height / 2]);
-    }
-    this.tiles = this.updateTiles();
+  updateTiles() {
+    this.tiles = this.generateTiles();
+  }
+
+  setCenter(center?: Position) {
+    this.updateProjection({ center });
     return this;
   }
 
-  public setZoom(zoom?: number) {
-    if (zoom) {
-      this.projection.scale(zoomToScale(zoom));
-    }
-    this.tiles = this.updateTiles();
+  setZoom(zoom?: number) {
+    this.updateProjection({ zoom });
     return this;
   }
 
-  public setZoomDelta(zoomDelta?: number) {
+  setZoomDelta(zoomDelta?: number) {
     if (zoomDelta !== undefined) {
       this.zoomDelta = zoomDelta;
     }
-    this.tiles = this.updateTiles();
+    this.updateTiles();
     return this;
   }
 
-  public setProjectionFitExtent(feature: ExtendedFeature | FeatureCollection) {
+  updateProjection({
+    center,
+    zoom,
+    bbox,
+  }: Partial<Pick<CanvasMapBaseOptions, "center" | "zoom" | "bbox">> = {}) {
     const { width, height } = this;
-    this.projection.fitExtent(
-      [
-        [this.theme.padding.left, this.theme.padding.top],
-        [width - this.theme.padding.right, height - this.theme.padding.bottom],
-      ],
-      isFeature(feature)
-        ? feature
-        : rewind(bboxPolygon(bbox(feature)), { reverse: true }),
-    );
-    this.tiles = this.updateTiles();
+    const currentCenter = this.projection.center();
+    if (bbox) {
+      this.bbox = bbox;
+    }
+
+    if (this.bbox) {
+      this.projection.fitExtent(
+        [
+          [this.theme.padding.left, this.theme.padding.top],
+          [
+            width - this.theme.padding.right,
+            height - this.theme.padding.bottom,
+          ],
+        ],
+        rewind(bboxPolygon(this.bbox), { reverse: true }),
+      );
+    } else {
+      if (center) {
+        this.projection
+          .center(center as [number, number])
+          .translate([width / 2, height / 2]);
+      }
+      if (currentCenter[0] !== 0 && currentCenter[1] !== 0) {
+        this.projection
+          .center(currentCenter)
+          .translate([width / 2, height / 2]);
+      }
+      if (zoom) {
+        this.projection.scale(zoomToScale(zoom));
+      }
+    }
+    this.updateTiles();
     return this;
   }
 
-  public setTitle(title?: string) {
+  setBBox(bbox: BBox | undefined) {
+    this.bbox = bbox;
+    this.updateProjection();
+    return this;
+  }
+
+  clearBBox() {
+    if (this.bbox) {
+      const lon = this.bbox[0] + (this.bbox[2] - this.bbox[0]) / 2;
+      const lat = this.bbox[1] + (this.bbox[3] - this.bbox[1]) / 2;
+      this.bbox = undefined;
+      this.setCenter([lon, lat]);
+    }
+
+    return this;
+  }
+
+  setProjectionFitExtent(feature: ExtendedFeature | FeatureCollection) {
+    this.setBBox(turfBBox(feature));
+    return this;
+  }
+
+  setTitle(title?: string) {
     this.title = title;
     this.state.textRendered = false;
     return this;
   }
 
-  public setTheme(theme: Omit<DefineThemeOptions, "width" | "height">) {
+  setTheme(theme: Omit<DefineThemeOptions, "width" | "height">) {
     const { width, height } = this;
     this.theme = defineTheme({ width, height, ...theme });
     return this;
   }
 
-  public addAttribution(attribution: string) {
+  addAttribution(attribution: string) {
     if (!this.attribution.includes(attribution))
       this.attribution.push(attribution);
     return this;
   }
 
-  public getSize() {
+  getSize() {
     const { width, height } = this;
     return { width, height };
   }
 
-  public getProjection() {
+  getBBox() {
+    return this.bbox;
+  }
+
+  getProjection() {
     return this.projection;
   }
 
-  public getTiles() {
+  getZoom() {
+    const { projection } = this;
+    return scaleToZoom(projection.scale());
+  }
+
+  getTiles() {
     return this.tiles;
   }
 }

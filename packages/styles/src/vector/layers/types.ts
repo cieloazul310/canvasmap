@@ -82,7 +82,11 @@ function getAlignBaseline(dspPos: DspPos) {
 export function getLabelSize(annoCtg: number): keyof MapFontSizes {
   return annoCtg === 210 ? "small" : "default";
 }
+/*
+export function createFontString(annoCtg: number, { fontSizes }: Theme) {
 
+}
+*/
 export function labelColor(annoCtg: number, { palette }: Theme): string {
   if ([312, 1312, 2312].includes(annoCtg)) return palette.label.terrain;
   if ([321, 1321, 2321, 322, 1322, 2322].includes(annoCtg))

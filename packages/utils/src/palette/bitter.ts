@@ -10,7 +10,10 @@ const bitter: Palette = {
     town: "#99c",
   },
   waterarea: "#ccd",
-  railway: "#999",
+  railway: {
+    section: "#777",
+    station: "#666",
+  },
   road: {
     base: "#ffffff",
     national: "#dabfa4",
@@ -19,10 +22,10 @@ const bitter: Palette = {
   contour: "#cbc7a9",
   building: "#eed",
   label: {
-    terrain: "#977",
-    water: "#aac",
-    em: "#aaa",
-    base: "#ccc",
+    terrain: "#755",
+    water: "#88a",
+    em: "#666",
+    base: "#999",
   },
 };
 

@@ -17,7 +17,12 @@ export function canonicalizeHex(input?: string | Record<string, string>) {
   return input;
 }
 
-export type NestedPaletteNames = "background" | "road" | "label" | "boundary";
+export type NestedPaletteNames =
+  | "background"
+  | "road"
+  | "label"
+  | "boundary"
+  | "railway";
 
 function nestedKeys<T extends NestedPaletteNames>(variant: T) {
   if (variant === "background")
@@ -26,6 +31,9 @@ function nestedKeys<T extends NestedPaletteNames>(variant: T) {
     return ["base", "national", "highway"] as (keyof Palette["road"])[];
   if (variant === "boundary")
     return ["pref", "town"] as (keyof Palette["boundary"])[];
+  if (variant === "railway")
+    return ["section", "station"] as (keyof Palette["railway"])[];
+
   return ["base", "em", "water", "terrain"] as (keyof Palette["label"])[];
 }
 

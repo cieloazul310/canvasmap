@@ -22,7 +22,7 @@ export function defineTheme({
   height,
 }: DefineThemeOptions): Theme {
   return {
-    fontSizes: defineMapFontSizes(width, height),
+    fontSizes: defineMapFontSizes(width),
     padding: definePadding(width, height, padding),
     palette: definePalette(palette),
   };

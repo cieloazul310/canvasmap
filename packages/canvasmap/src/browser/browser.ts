@@ -15,7 +15,7 @@ import CanvasMapBase, {
 export type CanvasMapBrowserOptions = CanvasMapBaseOptions;
 
 class CanvasMapBrowser extends CanvasMapBase {
-  private canvas: HTMLCanvasElement;
+  #canvas: HTMLCanvasElement;
 
   constructor(
     width: number,
@@ -24,35 +24,32 @@ class CanvasMapBrowser extends CanvasMapBase {
   ) {
     super(width, height, options);
 
-    this.canvas = document.createElement("canvas");
-    this.canvas.width = width;
-    this.canvas.height = height;
+    this.#canvas = document.createElement("canvas");
+    this.#canvas.width = width;
+    this.#canvas.height = height;
   }
 
-  public setSize({
-    width,
-    height,
-  }: Partial<{ width: number; height: number }>) {
+  setSize({ width, height }: Partial<{ width: number; height: number }>) {
     if (width) {
       this.width = width;
-      this.canvas.width = width;
+      this.#canvas.width = width;
     }
     if (height) {
       this.height = height;
-      this.canvas.height = height;
+      this.#canvas.height = height;
     }
-    this.tiles = this.updateTiles();
+    this.updateProjection();
     return this;
   }
 
-  public async renderVectorMap({
+  async renderVectorMap({
     background,
     backgroundFeature,
     layers,
     attribution,
   }: Partial<VectorMapOptions> = {}) {
-    const context = this.canvas.getContext("2d");
-    const { width, height } = this.canvas;
+    const context = this.#canvas.getContext("2d");
+    const { width, height } = this.#canvas;
     if (!context) return this;
 
     this.addAttribution(attribution ?? "国土地理院");
@@ -70,13 +67,13 @@ class CanvasMapBrowser extends CanvasMapBase {
     return this;
   }
 
-  public async renderRasterMap({
+  async renderRasterMap({
     tileUrl,
     attribution,
     tileSize,
   }: Partial<RasterMapOptions> = {}) {
-    const context = this.canvas.getContext("2d");
-    const { width, height } = this.canvas;
+    const context = this.#canvas.getContext("2d");
+    const { width, height } = this.#canvas;
     if (!context) return this;
 
     this.addAttribution(attribution ?? "国土地理院");
@@ -95,7 +92,7 @@ class CanvasMapBrowser extends CanvasMapBase {
    * @deprecated
    * migrate to `renderVectorMap` or `renderRasterMap`
    */
-  public async renderBasemap(
+  async renderBasemap(
     type: "vector" | "raster",
     {
       background,
@@ -105,8 +102,8 @@ class CanvasMapBrowser extends CanvasMapBase {
       rasterGrayScale,
     }: Partial<TileMapOptions> = {},
   ) {
-    const context = this.canvas.getContext("2d");
-    const { width, height } = this.canvas;
+    const context = this.#canvas.getContext("2d");
+    const { width, height } = this.#canvas;
     if (!context) return this;
 
     if (type === "vector") {
@@ -132,9 +129,9 @@ class CanvasMapBrowser extends CanvasMapBase {
     return this;
   }
 
-  public renderText(): CanvasMapBrowser {
+  renderText(): CanvasMapBrowser {
     const { width, height } = this;
-    const context = this.canvas.getContext("2d");
+    const context = this.#canvas.getContext("2d");
     if (!context || this.state.textRendered) return this;
 
     if (this.title) {
@@ -152,23 +149,23 @@ class CanvasMapBrowser extends CanvasMapBase {
     return this;
   }
 
-  public getCanvas() {
-    return this.canvas;
+  getCanvas() {
+    return this.#canvas;
   }
 
-  public getContext() {
-    const context = this.canvas.getContext("2d");
+  getContext() {
+    const context = this.#canvas.getContext("2d");
     return context;
   }
 
-  public getPath() {
-    const context = this.canvas.getContext("2d");
+  getPath() {
+    const context = this.#canvas.getContext("2d");
     return geoPath(this.projection, context);
   }
 
-  public clearContext() {
+  clearContext() {
     const { width, height, state } = this;
-    const context = this.canvas.getContext("2d");
+    const context = this.#canvas.getContext("2d");
 
     state.textRendered = false;
     context?.clearRect(0, 0, width, height);

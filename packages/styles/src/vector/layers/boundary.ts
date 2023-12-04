@@ -2,7 +2,7 @@ import type { Theme } from "@cieloazul310/canvasmap-utils";
 import type { VectorTileLayer, VectorTileFeatureProperties } from "./types";
 
 function boundaryWidth({ ftCode }: VectorTileFeatureProperties): number {
-  return ftCode === 1211 ? 2 : 1;
+  return ftCode === 1211 ? 3 : 2;
 }
 
 function boundaryColor(
@@ -26,7 +26,7 @@ const boundary: VectorTileLayer = {
       if (ftCode !== 1211 && ftCode !== 1212) return;
       context.lineWidth = boundaryWidth({ ftCode });
       context.strokeStyle = boundaryColor({ ftCode }, theme);
-      context.setLineDash([5, 5]);
+      context.setLineDash([6, 6]);
       context.stroke();
       context.setLineDash([]);
     },

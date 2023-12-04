@@ -6,11 +6,14 @@ const light: Palette = {
     contrast: "#eee",
   },
   boundary: {
-    pref: "#99c",
-    town: "#99c",
+    pref: "#a9c",
+    town: "#a9c",
   },
   waterarea: "#ccd",
-  railway: "#999",
+  railway: {
+    section: "#999",
+    station: "#a99",
+  },
   road: {
     national: "#dcb",
     highway: "#cdc",

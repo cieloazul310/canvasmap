@@ -23,7 +23,7 @@ import CanvasMapBase, {
 export type CanvasMapOptions = CanvasMapBaseOptions;
 
 class CanvasMap extends CanvasMapBase {
-  private canvas: NodeCanvas;
+  #canvas: NodeCanvas;
 
   constructor(
     width: number,
@@ -31,48 +31,45 @@ class CanvasMap extends CanvasMapBase {
     options?: Partial<CanvasMapOptions>,
   ) {
     super(width, height, options);
-    this.canvas = createCanvas(width, height);
+    this.#canvas = createCanvas(width, height);
   }
 
-  public setSize({
-    width,
-    height,
-  }: Partial<{ width: number; height: number }>) {
+  setSize({ width, height }: Partial<{ width: number; height: number }>) {
     if (width) {
       this.width = width;
-      this.canvas.width = width;
+      this.#canvas.width = width;
     }
     if (height) {
       this.height = height;
-      this.canvas.height = height;
+      this.#canvas.height = height;
     }
-    this.tiles = this.updateTiles();
+    this.updateProjection();
     return this;
   }
 
-  public getCanvas() {
-    return this.canvas;
+  getCanvas() {
+    return this.#canvas;
   }
 
-  public getContext() {
-    const context = this.canvas.getContext("2d");
+  getContext() {
+    const context = this.#canvas.getContext("2d");
     return context;
   }
 
-  public getPath() {
-    const context = this.canvas.getContext("2d");
+  getPath() {
+    const context = this.#canvas.getContext("2d");
     return geoPath(this.projection, context);
   }
 
-  public async renderVectorMap({
+  async renderVectorMap({
     background,
     backgroundFeature,
     layers,
     attribution,
   }: Partial<VectorMapOptions> = {}) {
-    const context = this.canvas.getContext("2d");
+    const context = this.#canvas.getContext("2d");
     const { tiles, projection, theme } = this;
-    const { width, height } = this.canvas;
+    const { width, height } = this.#canvas;
 
     this.addAttribution(attribution ?? "国土地理院");
 
@@ -89,14 +86,14 @@ class CanvasMap extends CanvasMapBase {
     return this;
   }
 
-  public async renderRasterMap({
+  async renderRasterMap({
     tileUrl,
     tileSize,
     attribution,
   }: Partial<RasterMapOptions> = {}) {
-    const context = this.canvas.getContext("2d");
+    const context = this.#canvas.getContext("2d");
     const { tiles } = this;
-    const { width, height } = this.canvas;
+    const { width, height } = this.#canvas;
 
     this.addAttribution(attribution ?? "国土地理院");
 
@@ -114,7 +111,7 @@ class CanvasMap extends CanvasMapBase {
    * @deprecated
    * migrate to `renderVectorMap` or `renderRasterMap`
    */
-  public async renderBasemap(
+  async renderBasemap(
     type: "vector" | "raster",
     {
       background,
@@ -123,8 +120,8 @@ class CanvasMap extends CanvasMapBase {
       tileUrl,
     }: Partial<TileMapOptions> = {},
   ): Promise<CanvasMap> {
-    const context = this.canvas.getContext("2d");
-    const { width, height } = this.canvas;
+    const context = this.#canvas.getContext("2d");
+    const { width, height } = this.#canvas;
 
     if (type === "vector") {
       await vectorTiles(context, {
@@ -144,8 +141,8 @@ class CanvasMap extends CanvasMapBase {
   }
 
   private renderText(): CanvasMap {
-    const { width, height } = this.canvas;
-    const context = this.canvas.getContext("2d");
+    const { width, height } = this.#canvas;
+    const context = this.#canvas.getContext("2d");
     if (this.title) {
       renderTitle(context, { width, title: this.title, theme: this.theme });
     }
@@ -161,9 +158,9 @@ class CanvasMap extends CanvasMapBase {
     return this;
   }
 
-  public clearContext() {
+  clearContext() {
     const { width, height, state } = this;
-    const context = this.canvas.getContext("2d");
+    const context = this.#canvas.getContext("2d");
     state.textRendered = false;
 
     context?.clearRect(0, 0, width, height);
@@ -171,7 +168,7 @@ class CanvasMap extends CanvasMapBase {
     return this;
   }
 
-  public async exportPng(
+  async exportPng(
     file: string,
     pngOptions: PngOptions = {
       palette: true,
@@ -179,8 +176,7 @@ class CanvasMap extends CanvasMapBase {
     },
   ): Promise<CanvasMap> {
     if (!this.state.textRendered) this.renderText();
-    const { canvas } = this;
-    const buffer = canvas.toBuffer();
+    const buffer = this.#canvas.toBuffer();
     const dir = path.dirname(file);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
@@ -192,13 +188,9 @@ class CanvasMap extends CanvasMapBase {
     return this;
   }
 
-  public async exportJpg(
-    file: string,
-    jpegOptions?: JpegOptions,
-  ): Promise<CanvasMap> {
+  async exportJpg(file: string, jpegOptions?: JpegOptions): Promise<CanvasMap> {
     this.renderText();
-    const { canvas } = this;
-    const buffer = canvas.toBuffer();
+    const buffer = this.#canvas.toBuffer();
     const dir = path.dirname(file);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
@@ -210,10 +202,9 @@ class CanvasMap extends CanvasMapBase {
     return this;
   }
 
-  public async exportWebp(file: string, webpOptions?: WebpOptions) {
+  async exportWebp(file: string, webpOptions?: WebpOptions) {
     this.renderText();
-    const { canvas } = this;
-    const buffer = canvas.toBuffer();
+    const buffer = this.#canvas.toBuffer();
     const dir = path.dirname(file);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
